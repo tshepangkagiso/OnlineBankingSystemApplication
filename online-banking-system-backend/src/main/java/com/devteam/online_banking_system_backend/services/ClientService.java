@@ -51,6 +51,11 @@ public class ClientService
         return repository.save(client);
     }
 
+    public Client updateClient(Client client)
+    {
+        return repository.save(client);
+    }
+
     //login
     public ClientLoginResponseDto login(ClientLoginDto dto)
     {

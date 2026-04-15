@@ -3,6 +3,8 @@ package com.devteam.online_banking_system_backend.persistence.entities;
 import com.devteam.online_banking_system_backend.persistence.exceptions.AccountException;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 
@@ -13,11 +15,11 @@ public class SavingsAccount extends Account
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long SavingsAccountId;
-    private Double InterestRate = 3.5; //add extra money to your savings based on how much you have deposited
+    private BigDecimal InterestRate = new BigDecimal("0.035").divide(new BigDecimal("31"), 10, RoundingMode.HALF_UP); //add extra money (3.5%) to your savings based on how much you have deposited
     private LocalDate LatestDepositDate;
 
     public SavingsAccount(){}
-    public SavingsAccount(Long savingsAccountId,Double balance, Double interestRate, LocalDate latestDepositDate)
+    public SavingsAccount(Long savingsAccountId, BigDecimal balance, BigDecimal interestRate, LocalDate latestDepositDate)
     {
         this.setSavingsAccountId(savingsAccountId);
         this.setBalance(balance);
@@ -33,11 +35,11 @@ public class SavingsAccount extends Account
     public Long getSavingsAccountId(){return this.SavingsAccountId;}
     public void setSavingsAccountId(Long savingsAccountId){this.SavingsAccountId = savingsAccountId;}
 
-    public Double getInterestRate()
+    public BigDecimal getInterestRate()
     {
         return this.InterestRate;
     }
-    public void setInterestRate(Double interestRate)
+    public void setInterestRate(BigDecimal interestRate)
     {
         this.InterestRate = interestRate;
     }
@@ -49,28 +51,25 @@ public class SavingsAccount extends Account
     //Account Methods
     public void ApplyInterest()
     {
-        if(getLatestDepositDate().isBefore( getLatestDepositDate().plusMonths(1) ))
-        {
-            double newBalance = getBalance() + (getBalance() * getInterestRate());
-            this.setBalance(newBalance);
-        }
+        BigDecimal newBalance = getBalance().add(getBalance().multiply(getInterestRate()));
+        this.setBalance(newBalance.setScale(2, RoundingMode.HALF_EVEN));
     }
 
     @Override
-    public Double Deposit(Double depositAmount)
+    public BigDecimal Deposit(BigDecimal depositAmount)
     {
-        if(depositAmount <= 0)
+        if(depositAmount.compareTo(BigDecimal.ZERO) <= 0)
             throw new AccountException("Cannot deposit amount less or equal to zero.");
-        return depositAmount + this.getBalance();
+        return depositAmount.add(this.getBalance());
     }
 
     @Override
-    public Double Withdraw(Double withdrawAmount)
+    public BigDecimal Withdraw(BigDecimal withdrawAmount)
     {
-        if(this.getBalance() < withdrawAmount)
+        if(this.getBalance().compareTo(withdrawAmount) < 0)
             throw new AccountException("Cannot withdraw more than you currently have. Balance: R" + this.getBalance());
 
-        return this.getBalance() - withdrawAmount;
+        return this.getBalance().subtract(withdrawAmount);
     }
 
 }

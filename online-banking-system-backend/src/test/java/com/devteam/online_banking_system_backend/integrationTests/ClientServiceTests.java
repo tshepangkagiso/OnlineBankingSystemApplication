@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import java.math.BigDecimal;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,6 +66,18 @@ public class ClientServiceTests
     }
 
     @Test
+    public void testClientCanBeUpdated()
+    {
+        String email = "tomholland@gmail.com";
+        Client client = underTests.findClientByEmail(email);
+        client.setAccountHolder("New Name For You");
+        Client updatedClient = underTests.updateClient(client);
+
+        assertThat(updatedClient.getAccountHolder()).isEqualTo(client.getAccountHolder());
+        assertThat(updatedClient.getAccountNumber()).isEqualTo(client.getAccountNumber());
+    }
+
+    @Test
     public void testClientCanLogin()
     {
         ClientLoginDto loginDto = util.loginDto2();
@@ -82,41 +96,33 @@ public class ClientServiceTests
     @Test
     public void testClientCanOpenSavingsAccount()
     {
-        // 1. Arrange: Use an existing client (registered in @BeforeEach)
         String email = util.openAccountDto1().getEmail();
         Client clientBefore = underTests.findClientByEmail(email);
 
-        // Safety Check: Verify it starts as null
         assertThat(clientBefore.getSavingsAccount()).isNull();
 
-        // 2. Act: Call the void method
         underTests.clientOpenSavingsAccount(util.openAccountDto1());
 
-        // 3. Assert: Retrieve a FRESH copy of the client from the DB
         Client clientAfter = underTests.findClientByEmail(email);
 
         assertThat(clientAfter.getSavingsAccount()).isNotNull();
-        assertThat(clientAfter.getSavingsAccount().getBalance()).isEqualTo(0.0);
+        assertThat(clientAfter.getSavingsAccount().getBalance()).isEqualTo(new BigDecimal("0"));
     }
 
     @Test
     public void testClientCanOpenCheckAccount()
     {
-        // 1. Arrange: Use an existing client (registered in @BeforeEach)
         String email = util.openAccountDto2().getEmail();
         Client clientBefore = underTests.findClientByEmail(email);
 
-        // Safety Check: Verify it starts as null
         assertThat(clientBefore.getCheckAccount()).isNull();
 
-        // 2. Act: Call the void method
         underTests.clientOpenCheckAccount(util.openAccountDto2());
 
-        // 3. Assert: Retrieve a FRESH copy of the client from the DB
         Client clientAfter = underTests.findClientByEmail(email);
 
         assertThat(clientAfter.getCheckAccount()).isNotNull();
-        assertThat(clientAfter.getCheckAccount().getBalance()).isEqualTo(0.0);
+        assertThat(clientAfter.getCheckAccount().getBalance()).isEqualTo(new BigDecimal("0"));
     }
 
 }
