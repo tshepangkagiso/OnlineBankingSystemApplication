@@ -22,11 +22,11 @@ public class Client
     @Column(nullable = false, unique = true)
     private String Email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SavingsAccountId")
     private SavingsAccount SavingsAccount;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CheckAccountId")
     private CheckAccount CheckAccount;
 

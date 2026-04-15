@@ -37,20 +37,20 @@ public class CheckAccount extends Account
     }
 
     @Override
-    public Double Deposit(Double depositAmount, Double currentBalance)
+    public Double Deposit(Double depositAmount)
     {
         if(depositAmount <= 0)
             throw new AccountException("Cannot deposit amount equal or less than zero.");
-        return currentBalance + depositAmount;
+        return this.getBalance() + depositAmount;
     }
 
     @Override
-    public Double Withdraw(Double withdrawAmount, Double currentBalance)
+    public Double Withdraw(Double withdrawAmount)
     {
         if(withdrawAmount <= 0.0)
             throw new AccountException("Cannot withdraw a zero or less amount. ");
 
-        return this.ApplyOverdraft(withdrawAmount, currentBalance);
+        return this.ApplyOverdraft(withdrawAmount, this.getBalance());
     }
 
 }

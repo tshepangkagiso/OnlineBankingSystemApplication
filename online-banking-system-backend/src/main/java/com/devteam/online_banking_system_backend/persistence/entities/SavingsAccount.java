@@ -25,6 +25,11 @@ public class SavingsAccount extends Account
         this.setLatestDepositDate(latestDepositDate);
     }
 
+    public SavingsAccount(LocalDate latestDepositDate)
+    {
+        this.setLatestDepositDate(latestDepositDate);
+    }
+
     public Long getSavingsAccountId(){return this.SavingsAccountId;}
     public void setSavingsAccountId(Long savingsAccountId){this.SavingsAccountId = savingsAccountId;}
 
@@ -52,19 +57,20 @@ public class SavingsAccount extends Account
     }
 
     @Override
-    public Double Deposit(Double depositAmount, Double currentBalance)
+    public Double Deposit(Double depositAmount)
     {
         if(depositAmount <= 0)
             throw new AccountException("Cannot deposit amount less or equal to zero.");
-        return depositAmount + currentBalance;
+        return depositAmount + this.getBalance();
     }
 
     @Override
-    public Double Withdraw(Double withdrawAmount, Double currentBalance)
+    public Double Withdraw(Double withdrawAmount)
     {
-        if(currentBalance < withdrawAmount)
-            throw new AccountException("Cannot withdraw more than you currently have. Balance: R" + currentBalance);
-        return 0.0;
+        if(this.getBalance() < withdrawAmount)
+            throw new AccountException("Cannot withdraw more than you currently have. Balance: R" + this.getBalance());
+
+        return this.getBalance() - withdrawAmount;
     }
 
 }
