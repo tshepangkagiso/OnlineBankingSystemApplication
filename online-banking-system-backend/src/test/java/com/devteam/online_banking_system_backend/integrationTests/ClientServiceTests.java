@@ -71,7 +71,7 @@ public class ClientServiceTests
         String email = "tomholland@gmail.com";
         Client client = underTests.findClientByEmail(email);
         client.setAccountHolder("New Name For You");
-        Client updatedClient = underTests.updateClient(client);
+        Client updatedClient = underTests.updateClient(email,client);
 
         assertThat(updatedClient.getAccountHolder()).isEqualTo(client.getAccountHolder());
         assertThat(updatedClient.getAccountNumber()).isEqualTo(client.getAccountNumber());

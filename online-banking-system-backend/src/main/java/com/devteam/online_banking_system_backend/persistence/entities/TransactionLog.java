@@ -42,8 +42,6 @@ public class TransactionLog
 
     public void setTransactionLogId(Long transactionLogId)
     {
-        if (transactionLogId == null)
-            throw new TransactionLogException("Transaction Log ID cannot be null.");
         this.TransactionLogId = transactionLogId;
     }
 

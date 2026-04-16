@@ -39,6 +39,7 @@ public class SavingsAccountTests
         this.clientService = clientService;
     }
 
+    private final String email = util.registerDto1().getEmail();
     @BeforeEach
     void setup()
     {
@@ -66,7 +67,7 @@ public class SavingsAccountTests
         SavingsAccount foundSavingsAccount = underTests.getSavingsAccountByID(savingsAccount.getSavingsAccountId());
         SavingsTransactionDto dto = new SavingsTransactionDto(foundSavingsAccount.getSavingsAccountId(), new BigDecimal("100.0"));
 
-        SavingsAccount account = underTests.deposit(dto);
+        SavingsAccount account = underTests.deposit(dto,email);
         assertThat(account.getBalance()).isEqualByComparingTo(new BigDecimal("100.0"));
 
     }
@@ -76,10 +77,10 @@ public class SavingsAccountTests
     {
         SavingsAccount foundSavingsAccount = underTests.getSavingsAccountByID(savingsAccount.getSavingsAccountId());
         SavingsTransactionDto dto1 = new SavingsTransactionDto(foundSavingsAccount.getSavingsAccountId(), new BigDecimal("100.0"));
-        underTests.deposit(dto1);
+        underTests.deposit(dto1,email);
 
         SavingsTransactionDto dto2 = new SavingsTransactionDto(foundSavingsAccount.getSavingsAccountId(), new BigDecimal("100.0"));
-        SavingsAccount account = underTests.withdraw(dto2);
+        SavingsAccount account = underTests.withdraw(dto2,email);
 
         assertThat(account.getBalance()).isEqualByComparingTo(BigDecimal.ZERO);
     }
@@ -89,7 +90,7 @@ public class SavingsAccountTests
     {
         SavingsAccount foundSavingsAccount = underTests.getSavingsAccountByID(savingsAccount.getSavingsAccountId());
         SavingsTransactionDto dto1 = new SavingsTransactionDto(foundSavingsAccount.getSavingsAccountId(), new BigDecimal("100.0"));
-        SavingsAccount account = underTests.deposit(dto1);
+        SavingsAccount account = underTests.deposit(dto1,email);
 
         account.ApplyInterest();
 

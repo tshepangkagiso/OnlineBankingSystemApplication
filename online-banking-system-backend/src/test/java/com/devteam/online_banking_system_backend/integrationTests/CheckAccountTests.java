@@ -39,6 +39,7 @@ public class CheckAccountTests
         this.clientService = clientService;
     }
 
+    private final String email = util.registerDto1().getEmail();
     @BeforeEach
     void setup()
     {
@@ -67,7 +68,7 @@ public class CheckAccountTests
         CheckAccount foundCheckAccount = underTests.getCheckAccountById(checkAccount.getCheckAccountId());
 
         CheckTransactionDto dto = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("1000.0"));
-        CheckAccount account = underTests.deposit(dto);
+        CheckAccount account = underTests.deposit(dto,email);
 
         assertThat(account.getBalance()).isEqualByComparingTo(new BigDecimal("1000.0"));
     }
@@ -78,10 +79,10 @@ public class CheckAccountTests
         CheckAccount foundCheckAccount = underTests.getCheckAccountById(checkAccount.getCheckAccountId());
 
         CheckTransactionDto dto1 = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("1000.0"));
-        underTests.deposit(dto1);
+        underTests.deposit(dto1,email);
 
         CheckTransactionDto dto2 = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("1300.0"));
-        CheckAccount account = underTests.withdraw(dto2);
+        CheckAccount account = underTests.withdraw(dto2,email);
 
         assertThat(account.getBalance()).isEqualByComparingTo(new BigDecimal("-300.0"));
     }
