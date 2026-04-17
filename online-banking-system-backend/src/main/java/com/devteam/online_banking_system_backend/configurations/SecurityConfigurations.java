@@ -23,7 +23,7 @@ public class SecurityConfigurations
 
         http.cors( cors -> cors.configurationSource( request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(List.of(webappRoute));
+            config.setAllowedOrigins(List.of("*"));
             config.setAllowedHeaders(List.of("*"));
             return config;
         })).csrf(csrf -> csrf.disable());
