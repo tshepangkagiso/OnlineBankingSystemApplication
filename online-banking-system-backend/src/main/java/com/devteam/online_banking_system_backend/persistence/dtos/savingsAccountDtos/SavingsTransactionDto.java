@@ -15,7 +15,7 @@ public class SavingsTransactionDto
     }
 
     public Long getSavingsAccountId(){return this.savingsAccountId;}
-    public void setSavingsAccountId(Long savingsAccountId){this.savingsAccountId = savingsAccountId;}
+    public void setSavingsAccountId(Long savingsaccountid){this.savingsAccountId = savingsaccountid;}
 
     public BigDecimal getAmount(){return this.amount;}
     public void setAmount(BigDecimal amount) {this.amount = amount;}

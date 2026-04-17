@@ -16,28 +16,28 @@ import java.util.Optional;
 public interface ITransactionLogRepository extends CrudRepository<TransactionLog, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT t FROM TransactionLog t WHERE t.TransactionLogId = :id")
+    @Query("SELECT t FROM TransactionLog t WHERE t.transactionLogId = :id")
     Optional<TransactionLog> findByIdWRITEOPERATIONS(@Param("id") Long id);
 
     // --- Client Facing ---
 
-    @Query("SELECT t FROM TransactionLog t WHERE t.ClientEmail = :email ORDER BY t.TransactionDateTime DESC")
+    @Query("SELECT t FROM TransactionLog t WHERE t.clientEmail = :email ORDER BY t.transactionDatetime DESC")
     Iterable<TransactionLog> findTransactionLogsByEmail(@Param("email") String email);
 
-    @Query("SELECT t FROM TransactionLog t WHERE t.ClientEmail = :email AND t.AccountType = :type ORDER BY t.TransactionDateTime DESC")
+    @Query("SELECT t FROM TransactionLog t WHERE t.clientEmail = :email AND t.accountType = :type ORDER BY t.transactionDatetime DESC")
     Iterable<TransactionLog> findTransactionLogsByAccountType(@Param("email") String email, @Param("type") ACCOUNTTYPE type);
 
-    @Query("SELECT t FROM TransactionLog t WHERE t.ClientEmail = :email ORDER BY t.TransactionDateTime DESC")
+    @Query("SELECT t FROM TransactionLog t WHERE t.clientEmail = :email ORDER BY t.transactionDatetime DESC")
     Iterable<TransactionLog> findRecentTransactions(@Param("email") String email);
 
     // --- Admin Facing ---
 
-    @Query("SELECT t FROM TransactionLog t WHERE t.TransactionDateTime BETWEEN :startDate AND :endDate ORDER BY t.TransactionDateTime DESC")
+    @Query("SELECT t FROM TransactionLog t WHERE t.transactionDatetime BETWEEN :startDate AND :endDate ORDER BY t.transactionDatetime DESC")
     Iterable<TransactionLog> findByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT t FROM TransactionLog t WHERE t.TransactionType = :type")
+    @Query("SELECT t FROM TransactionLog t WHERE t.transactionType = :type")
     Iterable<TransactionLog> findByTransactionType(@Param("type") TRANSACTIONTYPE type);
 
-    @Query("SELECT t FROM TransactionLog t WHERE t.PostTransactionBalance >= :threshold OR t.PreTransactionBalance >= :threshold ORDER BY t.TransactionDateTime DESC")
+    @Query("SELECT t FROM TransactionLog t WHERE t.postTransactionBalance >= :threshold OR t.preTransactionBalance >= :threshold ORDER BY t.transactionDatetime DESC")
     Iterable<TransactionLog> findHighValueTransactions(@Param("threshold") BigDecimal threshold);
 }

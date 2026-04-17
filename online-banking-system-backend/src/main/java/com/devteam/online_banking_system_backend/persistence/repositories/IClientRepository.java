@@ -11,10 +11,10 @@ import java.util.UUID;
 
 public interface IClientRepository extends CrudRepository<Client, UUID>
 {
-    @Query("SELECT c FROM Client c WHERE c.Email = :email")
+    @Query("SELECT c FROM Client c WHERE c.email = :email")
     Optional<Client> findByEmail(@Param("email") String email);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT c FROM Client c WHERE c.Email = :email")
+    @Query("SELECT c FROM Client c WHERE c.email = :email")
     Optional<Client> findByEmailWRITEOPERATION(@Param("email") String email);
 }

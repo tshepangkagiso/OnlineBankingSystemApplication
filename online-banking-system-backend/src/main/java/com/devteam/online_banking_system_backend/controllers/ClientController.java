@@ -1,0 +1,135 @@
+package com.devteam.online_banking_system_backend.controllers;
+
+import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginResponseDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
+import com.devteam.online_banking_system_backend.persistence.entities.Client;
+import com.devteam.online_banking_system_backend.services.ClientService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/clients")
+public class ClientController
+{
+    private final ClientService clientService;
+
+    public ClientController (ClientService clientService)
+    {
+        this.clientService = clientService;
+    }
+
+    //Get By Email (READ)
+    @GetMapping("/{email}")
+    public ResponseEntity<Client> getClientByEmail(@PathVariable String email)
+    {
+        try
+        {
+            Client foundClient = this.clientService.findClientByEmail(email);
+            return new ResponseEntity<>(foundClient, HttpStatus.OK);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Get ALL
+    @GetMapping
+    public ResponseEntity<List<Client>> getAllClients()
+    {
+        try
+        {
+            List<Client> clients = this.clientService.getAllClients();
+            return new ResponseEntity<>(clients, HttpStatus.OK);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //Register a client
+    @PostMapping("/register")
+    public ResponseEntity<Client> registerClient(@RequestBody ClientRegisterDto clientRegisterDto)
+    {
+        try
+        {
+            Client newClient = this.clientService.registerClient(clientRegisterDto);
+            return new ResponseEntity<>(newClient, HttpStatus.CREATED);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Client login
+    @PostMapping("/login")
+    public ResponseEntity<ClientLoginResponseDto> loginClient(@RequestBody ClientLoginDto loginDto)
+    {
+        try
+        {
+            ClientLoginResponseDto loginResponseDto = this.clientService.login(loginDto);
+            return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Update Client
+    @PutMapping("/update/{email}")
+    public ResponseEntity<Client> updateClient(@PathVariable String email, @RequestBody Client client)
+    {
+        try
+        {
+            Client updatedClient = this.clientService.updateClient(email,client);
+            return new ResponseEntity<>(updatedClient, HttpStatus.OK);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    //Open Savings Account
+    @PutMapping("/open/savings")
+    public ResponseEntity<Void> openSavingsAccount(@RequestBody OpenAccountDto openAccountDto)
+    {
+        try
+        {
+            this.clientService.clientOpenSavingsAccount(openAccountDto);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //Open Check Account
+    @PutMapping("/open/check")
+    public ResponseEntity<Void> openCheckAccount(@RequestBody OpenAccountDto openAccountDto)
+    {
+        try
+        {
+            this.clientService.clientOpenCheckAccount(openAccountDto);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+}

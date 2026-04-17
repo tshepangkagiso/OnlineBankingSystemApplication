@@ -11,24 +11,24 @@ public class Client
 {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID AccountNumber;
+    private UUID accountNumber;
 
     @Column(nullable = false)
-    private String AccountHolder;
+    private String accountHolder;
 
     @Column(nullable = false)
-    private String Password;
+    private String password;
 
     @Column(nullable = false, unique = true)
-    private String Email;
+    private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SavingsAccountId")
-    private SavingsAccount SavingsAccount;
+    private SavingsAccount savingsAccount;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CheckAccountId")
-    private CheckAccount CheckAccount;
+    private CheckAccount checkAccount;
 
     public Client(){}
     public Client(UUID accountNumber, String accountHolder, String password, String email, SavingsAccount savingsAccount, CheckAccount checkAccount)
@@ -42,41 +42,41 @@ public class Client
 
     public UUID getAccountNumber()
     {
-        return this.AccountNumber;
+        return this.accountNumber;
     }
-    public void setAccountNumber(UUID accountNumber) {this.AccountNumber = accountNumber;}
+    public void setAccountNumber(UUID accountNumber) {this.accountNumber = accountNumber;}
 
-    public String getAccountHolder(){ return  this.AccountHolder; }
+    public String getAccountHolder(){ return  this.accountHolder; }
     public void setAccountHolder(String accountHolder)
     {
         if(accountHolder.length() <= 3)
             throw new ClientException("AccountHolder name should be more than 3 characters.");
 
-        this.AccountHolder = accountHolder;
+        this.accountHolder = accountHolder;
     }
 
-    public String getPassword(){return this.Password;}
+    public String getPassword(){return this.password;}
     public void setPassword(String password)
     {
         if(password.length() <= 12)
             throw new ClientException("Password must contain more than 12 characters.");
 
-        this.Password = password;
+        this.password = password;
     }
 
-    public String getEmail(){return this.Email;}
+    public String getEmail(){return this.email;}
     public void setEmail(String email)
     {
         if(email.length() <= 12)
             throw new ClientException("Email must contain more than 12 characters.");
 
-        this.Email = email;
+        this.email = email;
     }
 
-    public SavingsAccount getSavingsAccount(){return this.SavingsAccount;}
-    public void setSavingsAccount(SavingsAccount savingsAccount){ this.SavingsAccount = savingsAccount;}
+    public SavingsAccount getSavingsAccount(){return this.savingsAccount;}
+    public void setSavingsAccount(SavingsAccount savingsAccount){ this.savingsAccount = savingsAccount;}
 
-    public CheckAccount getCheckAccount(){return this.CheckAccount;}
-    public void setCheckAccount(CheckAccount checkAccount){this.CheckAccount = checkAccount;}
+    public CheckAccount getCheckAccount(){return this.checkAccount;}
+    public void setCheckAccount(CheckAccount checkAccount){this.checkAccount = checkAccount;}
 
 }

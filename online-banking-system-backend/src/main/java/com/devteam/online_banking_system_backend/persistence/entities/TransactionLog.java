@@ -13,23 +13,23 @@ public class TransactionLog
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long TransactionLogId;
-    private LocalDateTime TransactionDateTime;
-    private String ClientEmail;
-    private ACCOUNTTYPE AccountType;
-    private TRANSACTIONTYPE TransactionType;
-    private BigDecimal PreTransactionBalance;
-    private BigDecimal PostTransactionBalance;
+    private Long transactionLogId;
+    private LocalDateTime transactionDatetime;
+    private String clientEmail;
+    private ACCOUNTTYPE accountType;
+    private TRANSACTIONTYPE transactionType;
+    private BigDecimal preTransactionBalance;
+    private BigDecimal postTransactionBalance;
 
 
     public TransactionLog() {}
 
-    public TransactionLog(Long transactionLogId, LocalDateTime transactionDateTime, String clientEmail,
+    public TransactionLog(Long transactionLogId, LocalDateTime transactionDatetime, String clientEmail,
                           ACCOUNTTYPE accountType, TRANSACTIONTYPE transactionType,
                           BigDecimal preTransactionBalance, BigDecimal postTransactionBalance)
     {
         setTransactionLogId(transactionLogId);
-        setTransactionDateTime(transactionDateTime);
+        setTransactionDatetime(transactionDatetime);
         setClientEmail(clientEmail);
         setAccountType(accountType);
         setTransactionType(transactionType);
@@ -38,65 +38,65 @@ public class TransactionLog
     }
 
 
-    public Long getTransactionLogId() { return TransactionLogId; }
+    public Long getTransactionLogId() { return transactionLogId; }
 
     public void setTransactionLogId(Long transactionLogId)
     {
-        this.TransactionLogId = transactionLogId;
+        this.transactionLogId = transactionLogId;
     }
 
-    public LocalDateTime getTransactionDateTime() { return TransactionDateTime; }
+    public LocalDateTime getTransactionDatetime() { return transactionDatetime; }
 
-    public void setTransactionDateTime(LocalDateTime transactionDateTime)
+    public void setTransactionDatetime(LocalDateTime transactionDatetime)
     {
-        if (transactionDateTime == null)
+        if (transactionDatetime == null)
             throw new TransactionLogException("Transaction timestamp cannot be null.");
 
-        this.TransactionDateTime = transactionDateTime;
+        this.transactionDatetime = transactionDatetime;
     }
 
-    public String getClientEmail() { return ClientEmail; }
+    public String getClientEmail() { return clientEmail; }
 
     public void setClientEmail(String clientEmail)
     {
         if (clientEmail == null || clientEmail.isBlank())
             throw new TransactionLogException("Client email cannot be null or empty.");
-        this.ClientEmail = clientEmail;
+        this.clientEmail = clientEmail;
     }
 
-    public ACCOUNTTYPE getAccountType() { return AccountType; }
+    public ACCOUNTTYPE getAccountType() { return accountType; }
 
     public void setAccountType(ACCOUNTTYPE accountType) {
         if (accountType == null)
             throw new TransactionLogException("Account type must be specified.");
-        this.AccountType = accountType;
+        this.accountType = accountType;
     }
 
-    public TRANSACTIONTYPE getTransactionType() { return TransactionType; }
+    public TRANSACTIONTYPE getTransactionType() { return transactionType; }
 
     public void setTransactionType(TRANSACTIONTYPE transactionType)
     {
         if (transactionType == null)
             throw new TransactionLogException("Transaction type must be specified.");
-        this.TransactionType = transactionType;
+        this.transactionType = transactionType;
     }
 
-    public BigDecimal getPreTransactionBalance() { return PreTransactionBalance; }
+    public BigDecimal getPreTransactionBalance() { return preTransactionBalance; }
 
     public void setPreTransactionBalance(BigDecimal preTransactionBalance)
     {
         if (preTransactionBalance == null)
             throw new TransactionLogException("Pre-transaction balance cannot be null.");
-        this.PreTransactionBalance = preTransactionBalance;
+        this.preTransactionBalance = preTransactionBalance;
     }
 
-    public BigDecimal getPostTransactionBalance() { return PostTransactionBalance; }
+    public BigDecimal getPostTransactionBalance() { return postTransactionBalance; }
 
     public void setPostTransactionBalance(BigDecimal postTransactionBalance)
     {
         if (postTransactionBalance == null)
             throw new TransactionLogException("Post-transaction balance cannot be null.");
-        this.PostTransactionBalance = postTransactionBalance;
+        this.postTransactionBalance = postTransactionBalance;
     }
 
 }

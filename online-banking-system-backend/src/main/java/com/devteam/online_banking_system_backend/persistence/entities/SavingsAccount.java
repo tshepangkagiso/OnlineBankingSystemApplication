@@ -14,9 +14,9 @@ public class SavingsAccount extends Account
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long SavingsAccountId;
-    private BigDecimal InterestRate = new BigDecimal("0.035").divide(new BigDecimal("31"), 10, RoundingMode.HALF_UP); //add extra money (3.5%) to your savings based on how much you have deposited
-    private LocalDate LatestDepositDate;
+    private Long savingsAccountId;
+    private BigDecimal interestRate = new BigDecimal("0.035").divide(new BigDecimal("31"), 10, RoundingMode.HALF_UP); //add extra money (3.5%) to your savings based on how much you have deposited
+    private LocalDate latestDepositDate;
 
     public SavingsAccount(){}
     public SavingsAccount(Long savingsAccountId, BigDecimal balance, BigDecimal interestRate, LocalDate latestDepositDate)
@@ -32,20 +32,20 @@ public class SavingsAccount extends Account
         this.setLatestDepositDate(latestDepositDate);
     }
 
-    public Long getSavingsAccountId(){return this.SavingsAccountId;}
-    public void setSavingsAccountId(Long savingsAccountId){this.SavingsAccountId = savingsAccountId;}
+    public Long getSavingsAccountId(){return this.savingsAccountId;}
+    public void setSavingsAccountId(Long savingsAccountId){this.savingsAccountId = savingsAccountId;}
 
     public BigDecimal getInterestRate()
     {
-        return this.InterestRate;
+        return this.interestRate;
     }
     public void setInterestRate(BigDecimal interestRate)
     {
-        this.InterestRate = interestRate;
+        this.interestRate = interestRate;
     }
 
-    public LocalDate getLatestDepositDate(){return this.LatestDepositDate;}
-    public void setLatestDepositDate(LocalDate latestDepositDate){ this.LatestDepositDate = latestDepositDate;}
+    public LocalDate getLatestDepositDate(){return this.latestDepositDate;}
+    public void setLatestDepositDate(LocalDate latestDepositdate){ this.latestDepositDate = latestDepositdate;}
 
 
     //Account Methods

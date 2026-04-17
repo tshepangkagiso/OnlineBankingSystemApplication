@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface ICheckAccountRepository extends CrudRepository<CheckAccount,Long>
 {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT a FROM CheckAccount a WHERE a.CheckAccountId = :id")
+    @Query("SELECT a FROM CheckAccount a WHERE a.checkAccountId = :id")
     Optional<CheckAccount> findByIdWRITEOPERATION(@Param("id") Long id);
 }

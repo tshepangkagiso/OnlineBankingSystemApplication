@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 @MappedSuperclass
 public abstract class Account
 {
-    private BigDecimal Balance = BigDecimal.ZERO;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     abstract BigDecimal Deposit(BigDecimal depositAmount);
     abstract BigDecimal Withdraw(BigDecimal withdrawAmount);
 
-    public BigDecimal getBalance() { return this.Balance; }
-    public void setBalance(BigDecimal balance) { this.Balance = balance; }
+    public BigDecimal getBalance() { return this.balance; }
+    public void setBalance(BigDecimal balance) { this.balance = balance; }
 }
 

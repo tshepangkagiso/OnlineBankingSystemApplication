@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface ISavingsAccountRepository extends CrudRepository<SavingsAccount,Long>
 {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT s FROM SavingsAccount s WHERE s.SavingsAccountId = :id")
+    @Query("SELECT s FROM SavingsAccount s WHERE s.savingsAccountId = :id")
     Optional<SavingsAccount> findByIdWRITEOPERATIONS(@Param("id") Long id);
 }

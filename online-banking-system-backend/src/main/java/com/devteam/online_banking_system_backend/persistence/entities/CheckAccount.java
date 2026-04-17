@@ -11,22 +11,22 @@ public class CheckAccount extends Account
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long CheckAccountId;
-    private BigDecimal OverdraftLimit = new BigDecimal("300.0"); //An overdraft limit is the maximum amount of money your bank allows you to borrow automatically when your account goes below zero
+    private Long checkAccountId;
+    private BigDecimal overDraftLimit = new BigDecimal("300.0"); //An overdraft limit is the maximum amount of money your bank allows you to borrow automatically when your account goes below zero
 
     public CheckAccount(){}
-    public CheckAccount(Long checkAccountId, BigDecimal balance, BigDecimal overdraftLimit)
+    public CheckAccount(Long checkAccountId, BigDecimal balance, BigDecimal overDraftLimit)
     {
         this.setCheckAccountId(checkAccountId);
         this.setBalance(balance);
-        this.setOverdraftLimit(overdraftLimit);
+        this.setOverdraftLimit(overDraftLimit);
     }
 
-    public Long getCheckAccountId(){return CheckAccountId;}
-    public void setCheckAccountId(Long checkAccountId){this.CheckAccountId = checkAccountId;}
+    public Long getCheckAccountId(){return checkAccountId;}
+    public void setCheckAccountId(Long checkAccountId){this.checkAccountId = checkAccountId;}
 
-    public BigDecimal getOverdraftLimit(){return this.OverdraftLimit;}
-    public void setOverdraftLimit(BigDecimal overdraftLimit){this.OverdraftLimit = overdraftLimit;}
+    public BigDecimal getOverdraftLimit(){return this.overDraftLimit;}
+    public void setOverdraftLimit(BigDecimal overDraftLimit){this.overDraftLimit = overDraftLimit;}
 
 
     //Account Methods

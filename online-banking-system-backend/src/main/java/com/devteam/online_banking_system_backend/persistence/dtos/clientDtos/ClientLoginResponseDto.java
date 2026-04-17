@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public class ClientLoginResponseDto
 {
-    private UUID AccountNumber;
-    private String AccountHolder;
-    private String Email;
-    private String Token;
+    private UUID accountNumber;
+    private String accountHolder;
+    private String email;
+    private String token;
 
     public ClientLoginResponseDto(){}
     public ClientLoginResponseDto(UUID accountNumber, String accountHolder, String email, String token)
@@ -23,28 +23,28 @@ public class ClientLoginResponseDto
 
     public UUID getAccountNumber()
     {
-        return this.AccountNumber;
+        return this.accountNumber;
     }
-    public void setAccountNumber(UUID accountNumber) {this.AccountNumber = accountNumber;}
+    public void setAccountNumber(UUID accountNumber) {this.accountNumber = accountNumber;}
 
-    public String getAccountHolder(){ return  this.AccountHolder; }
+    public String getAccountHolder(){ return  this.accountHolder; }
     public void setAccountHolder(String accountHolder)
     {
         if(accountHolder.length() <= 3)
             throw new ClientException("AccountHolder name should be more than 3 characters.");
 
-        this.AccountHolder = accountHolder;
+        this.accountHolder = accountHolder;
     }
 
-    public String getEmail(){return this.Email;}
+    public String getEmail(){return this.email;}
     public void setEmail(String email)
     {
         if(email.length() <= 12)
             throw new ClientException("Email must contain more than 12 characters.");
 
-        this.Email = email;
+        this.email = email;
     }
 
-    public String getToken(){return this.Token;}
-    public void setToken(String token){this.Token = token;}
+    public String getToken(){return this.token;}
+    public void setToken(String token){this.token = token;}
 }

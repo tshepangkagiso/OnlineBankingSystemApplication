@@ -4,7 +4,7 @@ import com.devteam.online_banking_system_backend.persistence.exceptions.ClientEx
 
 public class OpenAccountDto
 {
-    private String Email;
+    private String email;
 
     public OpenAccountDto(){}
     public OpenAccountDto(String email)
@@ -12,12 +12,12 @@ public class OpenAccountDto
         this.setEmail(email);
     }
 
-    public String getEmail(){return this.Email;}
+    public String getEmail(){return this.email;}
     public void setEmail(String email)
     {
         if(email.length() <= 12)
             throw new ClientException("Email must contain more than 12 characters.");
 
-        this.Email = email;
+        this.email = email;
     }
 }
