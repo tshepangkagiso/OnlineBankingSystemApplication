@@ -1,6 +1,7 @@
 package com.devteam.online_banking_system_backend.controllerTests;
 
 import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.CheckTransactionDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.OverdraftToggleDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
@@ -83,6 +84,75 @@ public class CheckAccountControllerTests
         //withdraw
         CheckTransactionDto withdraw = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("700.00"));
         mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/withdraw/tomholland@gmail.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(withdraw)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.balance").value(-200.00));
+    }
+
+    @Test
+    public void testOverdraftLimitSetter() throws Exception
+    {
+        ClientRegisterDto clientRegisterDto = util.registerDto2();
+        ClientLoginDto loginDto = util.loginDto2();
+        String email = util.registerDto2().getEmail();
+
+        CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
+
+        //set new overdraftLimit
+        CheckTransactionDto limit = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("1000.0"));
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/checkaccounts/overdraft/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(limit))
+        ).andExpect(status().isOk()).andExpect(jsonPath("$.overdraftLimit").value(new BigDecimal("1000.0")));
+
+
+        //deposit
+        CheckTransactionDto deposit = new CheckTransactionDto( checkAccount.getCheckAccountId(), new BigDecimal("1000.00"));
+        this.checkAccountService.deposit(deposit,email);
+
+        //withdraw
+        CheckTransactionDto withdraw = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("2000.00"));
+        mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/withdraw/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(withdraw)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.balance").value(-1000.00));
+    }
+
+    @Test
+    public void testOverdraftToggle() throws Exception
+    {
+        ClientRegisterDto clientRegisterDto = util.registerDto2();
+        ClientLoginDto loginDto = util.loginDto2();
+        String email = util.registerDto2().getEmail();
+
+        CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
+
+        //toggle off
+        OverdraftToggleDto overdraftToggleDtoFalse = new OverdraftToggleDto(checkAccount.getCheckAccountId(),false);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/checkaccounts/toggle/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(overdraftToggleDtoFalse))
+        ).andExpect(status().isOk()).andExpect(jsonPath("$.overdraftLimit").value(0));
+
+        //toggle on
+        OverdraftToggleDto overdraftToggleDtoTrue = new OverdraftToggleDto(checkAccount.getCheckAccountId(),true);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/checkaccounts/toggle/" + email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(overdraftToggleDtoTrue))
+        ).andExpect(status().isOk()).andExpect(jsonPath("$.overdraftLimit").value(300));
+
+        //deposit
+        CheckTransactionDto deposit = new CheckTransactionDto( checkAccount.getCheckAccountId(), new BigDecimal("500.00"));
+        this.checkAccountService.deposit(deposit,email);
+
+        //withdraw
+        CheckTransactionDto withdraw = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("700.00"));
+        mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/withdraw/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(withdraw)))
                 .andExpect(status().isOk())

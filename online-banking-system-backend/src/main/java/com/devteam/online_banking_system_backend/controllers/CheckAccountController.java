@@ -1,6 +1,7 @@
 package com.devteam.online_banking_system_backend.controllers;
 
 import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.CheckTransactionDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.OverdraftToggleDto;
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
 import com.devteam.online_banking_system_backend.services.CheckAccountService;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,37 @@ public class CheckAccountController
         try
         {
             CheckAccount account = this.checkAccountService.withdraw(checkTransactionDto, email);
+            return new ResponseEntity<>(account,HttpStatus.OK);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //overdraft limit setter
+    @PutMapping("/overdraft/{email}")
+    public ResponseEntity<CheckAccount> overdraftLimitSetter(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
+    {
+        try
+        {
+            CheckAccount account = this.checkAccountService.OverdraftLimitSetter(checkTransactionDto, email);
+            return new ResponseEntity<>(account,HttpStatus.OK);
+        }
+        catch (RuntimeException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //overdraft toggle
+    @PutMapping("/toggle/{email}")
+    public ResponseEntity<CheckAccount> overdraftToggle(@RequestBody OverdraftToggleDto overdraftToggleDto, @PathVariable String email)
+    {
+        try
+        {
+            CheckAccount account = this.checkAccountService.OverdraftToggle(overdraftToggleDto,email);
             return new ResponseEntity<>(account,HttpStatus.OK);
         }
         catch (RuntimeException e)

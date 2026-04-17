@@ -1,6 +1,7 @@
 package com.devteam.online_banking_system_backend.services;
 
 import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.CheckTransactionDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.OverdraftToggleDto;
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
 import com.devteam.online_banking_system_backend.persistence.entities.TransactionLog;
 import com.devteam.online_banking_system_backend.persistence.enums.ACCOUNTTYPE;
@@ -92,4 +93,57 @@ public class CheckAccountService
 
         return savedAccount;
     }
+
+
+    //Overdraft Limit Setter
+    public CheckAccount OverdraftLimitSetter(CheckTransactionDto dto,String email)
+    {
+        CheckAccount account = getCheckAccountByIdWRITE(dto.getCheckAccountId());
+        account.setOverdraftLimit(dto.getAmount().abs());
+
+
+        BigDecimal preBalance = account.getBalance();
+        BigDecimal postBalance = account.getBalance();
+        transactionLogService.recordTransaction(new TransactionLog(
+                null,
+                LocalDateTime.now(),
+                email,
+                ACCOUNTTYPE.CHECKACCOUNT,
+                TRANSACTIONTYPE.OVERDRAFTSETTER,
+                preBalance,
+                postBalance
+        ));
+
+        return this.repository.save(account);
+    }
+
+    //Overdraft Toggle
+    public CheckAccount OverdraftToggle(OverdraftToggleDto dto, String email)
+    {
+        CheckAccount account = getCheckAccountByIdWRITE(dto.getCheckAccountId());
+        if(dto.getToggle().equals(false))
+        {
+            account.setOverdraftLimit(BigDecimal.ZERO);
+        }
+        else
+        {
+            account.setOverdraftLimit(new BigDecimal("300.0"));
+        }
+
+
+        BigDecimal preBalance = account.getBalance();
+        BigDecimal postBalance = account.getBalance();
+        transactionLogService.recordTransaction(new TransactionLog(
+                null,
+                LocalDateTime.now(),
+                email,
+                ACCOUNTTYPE.CHECKACCOUNT,
+                TRANSACTIONTYPE.OVERDRAFTSETTER,
+                preBalance,
+                postBalance
+        ));
+
+        return this.repository.save(account);
+    }
+
 }
