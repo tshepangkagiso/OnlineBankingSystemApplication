@@ -1,9 +1,9 @@
 package com.devteam.online_banking_system_backend.integrationTests;
 
-import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
-import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthResponseDto;
+
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.utility.util;
 import jakarta.transaction.Transactional;
@@ -26,11 +26,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ClientServiceTests
 {
     private final ClientService underTests;
+    private final ClientUserDetailsService userDetailsService;
+
 
     @Autowired
-    public ClientServiceTests( ClientService underTests)
+    public ClientServiceTests( ClientService underTests, ClientUserDetailsService userDetailsService)
     {
         this.underTests = underTests;
+        this.userDetailsService = userDetailsService;
     }
 
     @BeforeEach
@@ -38,8 +41,8 @@ public class ClientServiceTests
     {
         ClientRegisterDto dto1 = util.registerDto1();
         ClientRegisterDto dto2 = util.registerDto2();
-        underTests.registerClient(dto1);
-        underTests.registerClient(dto2);
+        this.userDetailsService.register(dto1);
+        this.userDetailsService.register(dto2);
     }
 
     @Test
@@ -56,14 +59,6 @@ public class ClientServiceTests
         assertThat(results).hasSize(2);
     }
 
-    @Test
-    public void testClientCanBeRegistered()
-    {
-        ClientRegisterDto newClient = util.registerDto3();
-        Client registeredClient = underTests.registerClient(newClient);
-
-        assertThat(registeredClient.getEmail()).isEqualTo(newClient.getEmail());
-    }
 
     @Test
     public void testClientCanBeUpdated()
@@ -75,22 +70,6 @@ public class ClientServiceTests
 
         assertThat(updatedClient.getAccountHolder()).isEqualTo(client.getAccountHolder());
         assertThat(updatedClient.getAccountNumber()).isEqualTo(client.getAccountNumber());
-    }
-
-    @Test
-    public void testClientCanLogin()
-    {
-        AuthRequestDto loginDto = util.loginDto2();
-
-        AuthResponseDto responseDto = underTests.login(loginDto);
-        Client client = underTests.findClientByEmail(loginDto.getEmail());
-
-        assertThat(responseDto.getEmail()).isEqualTo(loginDto.getEmail());
-        assertThat(client.getEmail()).isEqualTo(loginDto.getEmail());
-
-        assertThat(responseDto.getEmail()).isEqualTo(client.getEmail());
-        assertThat(responseDto.getAccountNumber()).isEqualTo(client.getAccountNumber());
-        assertThat(responseDto.getAccountHolder()).isEqualTo(client.getAccountHolder());
     }
 
     @Test

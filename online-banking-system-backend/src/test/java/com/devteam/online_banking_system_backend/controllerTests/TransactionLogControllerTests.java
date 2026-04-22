@@ -7,6 +7,8 @@ import com.devteam.online_banking_system_backend.persistence.dtos.savingsAccount
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
 import com.devteam.online_banking_system_backend.persistence.entities.SavingsAccount;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
+import com.devteam.online_banking_system_backend.security.JwtService;
 import com.devteam.online_banking_system_backend.services.CheckAccountService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.services.SavingsAccountService;
@@ -37,26 +39,30 @@ public class TransactionLogControllerTests
     private final ClientService clientService;
     private final SavingsAccountService savingsAccountService;
     private final CheckAccountService checkAccountService;
+    private final ClientUserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @Autowired
-    public TransactionLogControllerTests(MockMvc mockMvc, ClientService clientService,SavingsAccountService savingsAccountService,CheckAccountService checkAccountService)
+    public TransactionLogControllerTests(MockMvc mockMvc, JwtService jwtService,ClientService clientService,ClientUserDetailsService userDetailsService,SavingsAccountService savingsAccountService,CheckAccountService checkAccountService)
     {
         this.mockMvc = mockMvc;
         this.clientService = clientService;
         this.savingsAccountService = savingsAccountService;
         this.checkAccountService = checkAccountService;
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
     }
 
     @Test
     public void testGetHistoryByAccountType() throws Exception
     {
         String email = setup();
-
-        mockMvc.perform(get("/transactionlogs/history/" + email + "/CHECKACCOUNT"))
+        String token = jwtService.generateToken(email);
+        mockMvc.perform(get("/transactionlogs/history/" + email + "/CHECKACCOUNT").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].accountType").value("CHECKACCOUNT"));
 
-        mockMvc.perform(get("/transactionlogs/history/" + email + "/SAVINGSACCOUNT"))
+        mockMvc.perform(get("/transactionlogs/history/" + email + "/SAVINGSACCOUNT").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].accountType").value("SAVINGSACCOUNT"));
     }
@@ -65,13 +71,13 @@ public class TransactionLogControllerTests
     public void testGetByDateRange() throws Exception
     {
         String email = setup();
-
+        String token = jwtService.generateToken(email);
         String start = LocalDateTime.now().minusMinutes(5).toString();
         String end = LocalDateTime.now().plusMinutes(5).toString();
 
         mockMvc.perform(get("/transactionlogs/admin/range")
                         .param("start", start)
-                        .param("end", end))
+                        .param("end", end).header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty());
     }
@@ -80,12 +86,12 @@ public class TransactionLogControllerTests
     public void testGetByTransactionType() throws Exception
     {
         String email = setup();
-
-        mockMvc.perform(get("/transactionlogs/admin/type/DEPOSIT"))
+        String token = jwtService.generateToken(email);
+        mockMvc.perform(get("/transactionlogs/admin/type/DEPOSIT").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].transactionType").value("DEPOSIT"));
 
-        mockMvc.perform(get("/transactionlogs/admin/type/WITHDRAWAL"))
+        mockMvc.perform(get("/transactionlogs/admin/type/WITHDRAWAL").header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].transactionType").value("WITHDRAWAL"));
     }
@@ -94,8 +100,8 @@ public class TransactionLogControllerTests
     public void testGetHistoryByEmail() throws Exception
     {
         String email = setup();
-
-        mockMvc.perform(get("/transactionlogs/history/" + email))
+        String token = jwtService.generateToken(email);
+        mockMvc.perform(get("/transactionlogs/history/" + email).header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(6))
@@ -107,8 +113,10 @@ public class TransactionLogControllerTests
     public void testGetRecentTransactions() throws Exception
     {
         String email = setup();
+        String token = jwtService.generateToken(email);
+        mockMvc.perform(get("/transactionlogs/recent/" + email)
+                        .header("Authorization", "Bearer " + token))
 
-        mockMvc.perform(get("/transactionlogs/recent/" + email))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(6));
@@ -118,9 +126,10 @@ public class TransactionLogControllerTests
     public void testGetHighValueTransactions() throws Exception
     {
         String email = setup();
-
+        String token = jwtService.generateToken(email);
         mockMvc.perform(get("/transactionlogs/admin/high-value")
-                        .param("threshold", "100.00"))
+                        .param("threshold", "100.00")
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(4));
     }
@@ -129,7 +138,7 @@ public class TransactionLogControllerTests
     private String setup()
     {
         ClientRegisterDto reg = util.registerDto1();
-        Client client = this.clientService.registerClient(reg);
+        Client client = this.userDetailsService.register(reg);
 
         OpenAccountDto open = util.openAccountDto1();
         this.clientService.clientOpenCheckAccount(open);

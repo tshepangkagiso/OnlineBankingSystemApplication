@@ -8,6 +8,7 @@ import com.devteam.online_banking_system_backend.persistence.entities.Client;
 import com.devteam.online_banking_system_backend.persistence.entities.TransactionLog;
 import com.devteam.online_banking_system_backend.persistence.enums.ACCOUNTTYPE;
 import com.devteam.online_banking_system_backend.persistence.enums.TRANSACTIONTYPE;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
 import com.devteam.online_banking_system_backend.services.CheckAccountService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.services.SavingsAccountService;
@@ -40,14 +41,17 @@ public class TransactionLogTests {
     private final CheckAccountService checkAccountService;
     private final SavingsAccountService savingsAccountService;
     private final TransactionLogService underTests;
+    private final ClientUserDetailsService userDetailsService;
 
     @Autowired
     public TransactionLogTests(ClientService clientService, CheckAccountService checkAccountService,
-                               SavingsAccountService savingsAccountService, TransactionLogService underTests) {
+                               SavingsAccountService savingsAccountService, TransactionLogService underTests,ClientUserDetailsService userDetailsService)
+    {
         this.clientService = clientService;
         this.checkAccountService = checkAccountService;
         this.savingsAccountService = savingsAccountService;
         this.underTests = underTests;
+        this.userDetailsService = userDetailsService;
     }
 
     private final String testEmail = util.openAccountDto1().getEmail();
@@ -57,7 +61,7 @@ public class TransactionLogTests {
     {
         // 1. Register a client
         ClientRegisterDto registerDto = util.registerDto1();
-        clientService.registerClient(registerDto);
+        this.userDetailsService.register(registerDto);
 
         // 2. Open both accounts
         OpenAccountDto openDto = new OpenAccountDto(testEmail);

@@ -7,6 +7,8 @@ import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.Cli
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
+import com.devteam.online_banking_system_backend.security.JwtService;
 import com.devteam.online_banking_system_backend.services.CheckAccountService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.utility.util;
@@ -20,9 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import tools.jackson.databind.ObjectMapper;
-
 import java.math.BigDecimal;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,14 +36,18 @@ public class CheckAccountControllerTests
     private final ObjectMapper objectMapper;
     private final ClientService clientService;
     private final CheckAccountService checkAccountService;
+    private final ClientUserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @Autowired
-    public CheckAccountControllerTests(MockMvc mockMvc, ObjectMapper objectMapper, ClientService clientService, CheckAccountService checkAccountService)
+    public CheckAccountControllerTests(MockMvc mockMvc,JwtService jwtService,ClientUserDetailsService userDetailsService ,ObjectMapper objectMapper, ClientService clientService, CheckAccountService checkAccountService)
     {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
         this.clientService = clientService;
         this.checkAccountService = checkAccountService;
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
     }
 
 
@@ -54,11 +58,13 @@ public class CheckAccountControllerTests
         AuthRequestDto loginDto = util.loginDto1();
         String email = util.registerDto1().getEmail();
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
+        String token = jwtService.generateToken(email);
 
         //deposit
         CheckTransactionDto deposit = new CheckTransactionDto( checkAccount.getCheckAccountId(), new BigDecimal("500.00"));
         mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/deposit/tomholland@gmail.com")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(deposit)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(500.00));
@@ -70,7 +76,7 @@ public class CheckAccountControllerTests
         ClientRegisterDto clientRegisterDto = util.registerDto2();
         AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
-
+        String token = jwtService.generateToken(email);
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
 
         //deposit
@@ -81,6 +87,7 @@ public class CheckAccountControllerTests
         CheckTransactionDto withdraw = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("700.00"));
         mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/withdraw/tomholland@gmail.com")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(withdraw)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(-200.00));
@@ -92,7 +99,7 @@ public class CheckAccountControllerTests
         ClientRegisterDto clientRegisterDto = util.registerDto2();
         AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
-
+        String token = jwtService.generateToken(email);
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
 
         //set new overdraftLimit
@@ -100,6 +107,7 @@ public class CheckAccountControllerTests
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/checkaccounts/overdraft/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(limit))
         ).andExpect(status().isOk()).andExpect(jsonPath("$.overdraftLimit").value(new BigDecimal("1000.0")));
 
@@ -112,6 +120,7 @@ public class CheckAccountControllerTests
         CheckTransactionDto withdraw = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("2000.00"));
         mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/withdraw/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(withdraw)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(-1000.00));
@@ -123,7 +132,7 @@ public class CheckAccountControllerTests
         ClientRegisterDto clientRegisterDto = util.registerDto2();
         AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
-
+        String token = jwtService.generateToken(email);
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
 
         //toggle off
@@ -131,6 +140,7 @@ public class CheckAccountControllerTests
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/checkaccounts/toggle/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(overdraftToggleDtoFalse))
         ).andExpect(status().isOk()).andExpect(jsonPath("$.overdraftLimit").value(0));
 
@@ -139,6 +149,7 @@ public class CheckAccountControllerTests
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/checkaccounts/toggle/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(overdraftToggleDtoTrue))
         ).andExpect(status().isOk()).andExpect(jsonPath("$.overdraftLimit").value(300));
 
@@ -150,6 +161,7 @@ public class CheckAccountControllerTests
         CheckTransactionDto withdraw = new CheckTransactionDto(checkAccount.getCheckAccountId(), new BigDecimal("700.00"));
         mockMvc.perform(MockMvcRequestBuilders.put("/checkaccounts/withdraw/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(withdraw)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(-200.00));
@@ -159,12 +171,9 @@ public class CheckAccountControllerTests
     private CheckAccount setup(ClientRegisterDto clientRegisterDto, AuthRequestDto loginDto, String email)
     {
         // 1. Register
-        clientService.registerClient(clientRegisterDto);
+        this.userDetailsService.register(clientRegisterDto);
 
-        // 2. Login
-        clientService.login(loginDto);
-
-        // 3. Open Check
+        // 2. Open Check
         OpenAccountDto openAccountDto = new OpenAccountDto(email);
         clientService.clientOpenCheckAccount(openAccountDto);
 

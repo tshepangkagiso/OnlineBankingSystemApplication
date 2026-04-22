@@ -54,36 +54,6 @@ public class ClientController
     }
 
 
-    //Register a client
-    @PostMapping("/register")
-    public ResponseEntity<Client> registerClient(@RequestBody ClientRegisterDto clientRegisterDto)
-    {
-        try
-        {
-            Client newClient = this.clientService.registerClient(clientRegisterDto);
-            return new ResponseEntity<>(newClient, HttpStatus.CREATED);
-        }
-        catch (RuntimeException e)
-        {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    //Client login
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> loginClient(@RequestBody AuthRequestDto loginDto)
-    {
-        try
-        {
-            AuthResponseDto loginResponseDto = this.clientService.login(loginDto);
-            return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
-        }
-        catch (RuntimeException e)
-        {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
     //Update Client
     @PutMapping("/update/{email}")
     public ResponseEntity<Client> updateClient(@PathVariable String email, @RequestBody Client client)

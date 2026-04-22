@@ -5,6 +5,7 @@ import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.Ope
 import com.devteam.online_banking_system_backend.persistence.dtos.savingsAccountDtos.SavingsTransactionDto;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
 import com.devteam.online_banking_system_backend.persistence.entities.SavingsAccount;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.services.SavingsAccountService;
 import com.devteam.online_banking_system_backend.utility.util;
@@ -31,12 +32,14 @@ public class SavingsAccountTests
     private final SavingsAccountService underTests;
     private final ClientService clientService;
     private SavingsAccount savingsAccount;
+    private final ClientUserDetailsService userDetailsService;
 
     @Autowired
-    public SavingsAccountTests(SavingsAccountService underTests, ClientService clientService)
+    public SavingsAccountTests(SavingsAccountService underTests, ClientService clientService,ClientUserDetailsService userDetailsService)
     {
         this.underTests = underTests;
         this.clientService = clientService;
+        this.userDetailsService = userDetailsService;
     }
 
     private final String email = util.registerDto1().getEmail();
@@ -44,7 +47,7 @@ public class SavingsAccountTests
     void setup()
     {
         ClientRegisterDto dto = util.registerDto1();
-        clientService.registerClient(dto);
+        this.userDetailsService.register(dto);
 
         OpenAccountDto openAccountDto = util.openAccountDto1();
         clientService.clientOpenSavingsAccount(openAccountDto);

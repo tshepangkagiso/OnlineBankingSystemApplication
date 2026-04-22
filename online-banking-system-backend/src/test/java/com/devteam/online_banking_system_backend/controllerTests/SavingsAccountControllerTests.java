@@ -6,6 +6,8 @@ import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.Ope
 import com.devteam.online_banking_system_backend.persistence.dtos.savingsAccountDtos.SavingsTransactionDto;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
 import com.devteam.online_banking_system_backend.persistence.entities.SavingsAccount;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
+import com.devteam.online_banking_system_backend.security.JwtService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.services.SavingsAccountService;
 import com.devteam.online_banking_system_backend.utility.util;
@@ -35,14 +37,18 @@ public class SavingsAccountControllerTests
     private final ObjectMapper objectMapper;
     private final ClientService clientService;
     private final SavingsAccountService savingsAccountService;
+    private final ClientUserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @Autowired
-    public SavingsAccountControllerTests(MockMvc mockMvc, ObjectMapper objectMapper,ClientService clientService, SavingsAccountService savingsAccountService)
+    public SavingsAccountControllerTests(MockMvc mockMvc,JwtService jwtService,ClientUserDetailsService userDetailsService,ObjectMapper objectMapper,ClientService clientService, SavingsAccountService savingsAccountService)
     {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
         this.clientService = clientService;
         this.savingsAccountService = savingsAccountService;
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
     }
 
     @Test
@@ -51,6 +57,7 @@ public class SavingsAccountControllerTests
         ClientRegisterDto clientRegisterDto = util.registerDto1();
         AuthRequestDto loginDto = util.loginDto1();
         String email = util.registerDto1().getEmail();
+        String token = jwtService.generateToken(email);
         SavingsAccount savingsAccount = setup(clientRegisterDto,loginDto,email);
 
         //deposit
@@ -59,6 +66,7 @@ public class SavingsAccountControllerTests
 
         mockMvc.perform(put("/savingsaccounts/deposit/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(depositDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(1000.00));
@@ -70,6 +78,7 @@ public class SavingsAccountControllerTests
         ClientRegisterDto clientRegisterDto = util.registerDto2();
         AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
+        String token = jwtService.generateToken(email);
         SavingsAccount savingsAccount = setup(clientRegisterDto,loginDto,email);
 
 
@@ -84,6 +93,7 @@ public class SavingsAccountControllerTests
 
         mockMvc.perform(put("/savingsaccounts/withdraw/" + email)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
                         .content(objectMapper.writeValueAsString(withdrawDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(600.00));
@@ -94,14 +104,11 @@ public class SavingsAccountControllerTests
     private SavingsAccount setup(ClientRegisterDto clientRegisterDto, AuthRequestDto loginDto, String email)
     {
         // 1. Register
-        clientService.registerClient(clientRegisterDto);
+        this.userDetailsService.register(clientRegisterDto);
 
-        // 2. Login
-        clientService.login(loginDto);
-
-        // 3. Open Check
+        // 2. Open Check
         OpenAccountDto openAccountDto = new OpenAccountDto(email);
-        clientService.clientOpenSavingsAccount(openAccountDto);
+        this.clientService.clientOpenSavingsAccount(openAccountDto);
 
         Client client  = clientService.findClientByEmail(email);
         return client.getSavingsAccount();

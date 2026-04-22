@@ -6,6 +6,7 @@ import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.Cli
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
+import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
 import com.devteam.online_banking_system_backend.services.CheckAccountService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.utility.util;
@@ -33,12 +34,14 @@ public class CheckAccountTests
     private final CheckAccountService underTests;
     private final ClientService clientService;
     private CheckAccount checkAccount;
+    private final ClientUserDetailsService userDetailsService;
 
     @Autowired
-    public CheckAccountTests(CheckAccountService underTests, ClientService clientService )
+    public CheckAccountTests(CheckAccountService underTests, ClientService clientService, ClientUserDetailsService userDetailsService)
     {
         this.underTests = underTests;
         this.clientService = clientService;
+        this.userDetailsService = userDetailsService;
     }
 
     private final String email = util.registerDto1().getEmail();
@@ -47,7 +50,7 @@ public class CheckAccountTests
     void setup()
     {
         ClientRegisterDto dto = util.registerDto1();
-        clientService.registerClient(dto);
+        this.userDetailsService.register(dto);
 
         OpenAccountDto openAccountDto = util.openAccountDto1();
         clientService.clientOpenCheckAccount(openAccountDto);
