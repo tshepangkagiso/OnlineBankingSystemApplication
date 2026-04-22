@@ -1,6 +1,6 @@
 package com.devteam.online_banking_system_backend.controllerTests;
 
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.services.ClientService;
@@ -54,7 +54,7 @@ public class ClientControllerTests
         ClientRegisterDto reg = util.registerDto1();
         this.clientService.registerClient(reg);
 
-        ClientLoginDto login = util.loginDto1();
+        AuthRequestDto login = util.loginDto1();
         mockMvc.perform(MockMvcRequestBuilders.post("/clients/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(login)))

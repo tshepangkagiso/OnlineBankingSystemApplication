@@ -2,7 +2,7 @@ package com.devteam.online_banking_system_backend.controllerTests;
 
 import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.CheckTransactionDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.OverdraftToggleDto;
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
@@ -11,11 +11,7 @@ import com.devteam.online_banking_system_backend.services.CheckAccountService;
 import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.utility.util;
 import jakarta.transaction.Transactional;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -55,7 +51,7 @@ public class CheckAccountControllerTests
     public void testDeposit() throws Exception
     {
         ClientRegisterDto clientRegisterDto = util.registerDto1();
-        ClientLoginDto loginDto = util.loginDto1();
+        AuthRequestDto loginDto = util.loginDto1();
         String email = util.registerDto1().getEmail();
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
 
@@ -72,7 +68,7 @@ public class CheckAccountControllerTests
     public void testWithdraw() throws Exception
     {
         ClientRegisterDto clientRegisterDto = util.registerDto2();
-        ClientLoginDto loginDto = util.loginDto2();
+        AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
 
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
@@ -94,7 +90,7 @@ public class CheckAccountControllerTests
     public void testOverdraftLimitSetter() throws Exception
     {
         ClientRegisterDto clientRegisterDto = util.registerDto2();
-        ClientLoginDto loginDto = util.loginDto2();
+        AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
 
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
@@ -125,7 +121,7 @@ public class CheckAccountControllerTests
     public void testOverdraftToggle() throws Exception
     {
         ClientRegisterDto clientRegisterDto = util.registerDto2();
-        ClientLoginDto loginDto = util.loginDto2();
+        AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
 
         CheckAccount checkAccount = setup(clientRegisterDto,loginDto,email);
@@ -160,7 +156,7 @@ public class CheckAccountControllerTests
     }
 
 
-    private CheckAccount setup(ClientRegisterDto clientRegisterDto, ClientLoginDto loginDto, String email)
+    private CheckAccount setup(ClientRegisterDto clientRegisterDto, AuthRequestDto loginDto, String email)
     {
         // 1. Register
         clientService.registerClient(clientRegisterDto);

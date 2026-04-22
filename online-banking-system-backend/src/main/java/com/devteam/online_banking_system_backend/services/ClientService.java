@@ -1,7 +1,7 @@
 package com.devteam.online_banking_system_backend.services;
 
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginResponseDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthResponseDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.entities.CheckAccount;
@@ -12,7 +12,7 @@ import com.devteam.online_banking_system_backend.persistence.enums.ACCOUNTTYPE;
 import com.devteam.online_banking_system_backend.persistence.enums.TRANSACTIONTYPE;
 import com.devteam.online_banking_system_backend.persistence.exceptions.ClientException;
 import com.devteam.online_banking_system_backend.persistence.repositories.IClientRepository;
-import com.devteam.online_banking_system_backend.services.securityServices.PasswordService;
+import com.devteam.online_banking_system_backend.security.PasswordService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +66,7 @@ public class ClientService
     public Client registerClient(ClientRegisterDto dto)
     {
         String hashedPassword = passwordService.HashPassword(dto.getPassword());
-        Client client = new Client(null, dto.getAccountHolder(),hashedPassword, dto.getEmail(),null,null);
+        Client client = new Client(dto.getAccountHolder(),hashedPassword, dto.getEmail());
         return repository.save(client);
     }
 
@@ -82,14 +82,14 @@ public class ClientService
     }
 
     //login
-    public ClientLoginResponseDto login(ClientLoginDto dto)
+    public AuthResponseDto login(AuthRequestDto dto)
     {
         Client client = findClientByEmail(dto.getEmail());
         if(!passwordService.isVerifiedPassword(dto.getPassword(), client.getPassword()))
             throw new ClientException("Incorrect Password, please try again.");
 
         String token = "jbcshcsjcnsksmcskmcskcmskcmskcmskcsmcksmskcskcmskcmcksmskcsc";
-        return new ClientLoginResponseDto(client.getAccountNumber(), client.getAccountHolder(), client.getEmail(), token);
+        return new AuthResponseDto(client.getAccountNumber(), client.getAccountHolder(), client.getEmail(), token);
     }
 
     //open a new savings account

@@ -1,14 +1,14 @@
-package com.devteam.online_banking_system_backend.persistence.dtos.clientDtos;
+package com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos;
 
 import com.devteam.online_banking_system_backend.persistence.exceptions.ClientException;
 
-public class ClientLoginDto
+public class AuthRequestDto
 {
     private String password;
     private String email;
 
-    public ClientLoginDto(){}
-    public ClientLoginDto(String password, String email)
+    public AuthRequestDto(){}
+    public AuthRequestDto(String password, String email)
     {
         this.setPassword(password);
         this.setEmail(email);

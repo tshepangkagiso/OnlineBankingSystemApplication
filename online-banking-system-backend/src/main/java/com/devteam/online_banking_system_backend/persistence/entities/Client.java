@@ -1,8 +1,13 @@
 package com.devteam.online_banking_system_backend.persistence.entities;
 
+import com.devteam.online_banking_system_backend.persistence.enums.Role;
 import com.devteam.online_banking_system_backend.persistence.exceptions.ClientException;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,13 +35,35 @@ public class Client
     @JoinColumn(name = "CheckAccountId")
     private CheckAccount checkAccount;
 
+    @Setter
+    @Getter
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private List<Role> roles;
+
     public Client(){}
-    public Client(UUID accountNumber, String accountHolder, String password, String email, SavingsAccount savingsAccount, CheckAccount checkAccount)
+
+    public Client(UUID accountNumber, String accountHolder, String password, String email, SavingsAccount savingsAccount, CheckAccount checkAccount, List<Role> roles)
     {
         this.setAccountNumber(accountNumber);
         this.setAccountHolder(accountHolder);
         this.setPassword(password);
         this.setEmail(email);
+        this.setSavingsAccount(savingsAccount);
+        this.setCheckAccount(checkAccount);
+        this.setRoles(roles);
+    }
+
+    public Client(String accountHolder, String password, String email)
+    {
+        this.setAccountNumber(null);
+        this.setAccountHolder(accountHolder);
+        this.setPassword(password);
+        this.setEmail(email);
+
+        List<Role> roles = new ArrayList<>(){};
+        roles.add(Role.ROLE_USER);
+        this.setRoles(roles);
     }
 
 

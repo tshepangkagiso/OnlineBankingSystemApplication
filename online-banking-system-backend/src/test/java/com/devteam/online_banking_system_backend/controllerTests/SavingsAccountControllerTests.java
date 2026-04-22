@@ -1,6 +1,6 @@
 package com.devteam.online_banking_system_backend.controllerTests;
 
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.savingsAccountDtos.SavingsTransactionDto;
@@ -49,7 +49,7 @@ public class SavingsAccountControllerTests
     public void testDeposit() throws Exception
     {
         ClientRegisterDto clientRegisterDto = util.registerDto1();
-        ClientLoginDto loginDto = util.loginDto1();
+        AuthRequestDto loginDto = util.loginDto1();
         String email = util.registerDto1().getEmail();
         SavingsAccount savingsAccount = setup(clientRegisterDto,loginDto,email);
 
@@ -68,7 +68,7 @@ public class SavingsAccountControllerTests
     public void testWithdraw() throws Exception
     {
         ClientRegisterDto clientRegisterDto = util.registerDto2();
-        ClientLoginDto loginDto = util.loginDto2();
+        AuthRequestDto loginDto = util.loginDto2();
         String email = util.registerDto2().getEmail();
         SavingsAccount savingsAccount = setup(clientRegisterDto,loginDto,email);
 
@@ -91,7 +91,7 @@ public class SavingsAccountControllerTests
 
 
 
-    private SavingsAccount setup(ClientRegisterDto clientRegisterDto, ClientLoginDto loginDto, String email)
+    private SavingsAccount setup(ClientRegisterDto clientRegisterDto, AuthRequestDto loginDto, String email)
     {
         // 1. Register
         clientService.registerClient(clientRegisterDto);

@@ -1,7 +1,6 @@
 package com.devteam.online_banking_system_backend.controllerTests;
 
 import com.devteam.online_banking_system_backend.persistence.dtos.checkAccountDtos.CheckTransactionDto;
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.savingsAccountDtos.SavingsTransactionDto;
@@ -13,16 +12,13 @@ import com.devteam.online_banking_system_backend.services.ClientService;
 import com.devteam.online_banking_system_backend.services.SavingsAccountService;
 import com.devteam.online_banking_system_backend.utility.util;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import tools.jackson.databind.ObjectMapper;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

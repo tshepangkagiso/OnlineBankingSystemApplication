@@ -1,7 +1,7 @@
 package com.devteam.online_banking_system_backend.controllers;
 
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginResponseDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthResponseDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.OpenAccountDto;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
@@ -71,11 +71,11 @@ public class ClientController
 
     //Client login
     @PostMapping("/login")
-    public ResponseEntity<ClientLoginResponseDto> loginClient(@RequestBody ClientLoginDto loginDto)
+    public ResponseEntity<AuthResponseDto> loginClient(@RequestBody AuthRequestDto loginDto)
     {
         try
         {
-            ClientLoginResponseDto loginResponseDto = this.clientService.login(loginDto);
+            AuthResponseDto loginResponseDto = this.clientService.login(loginDto);
             return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
         }
         catch (RuntimeException e)

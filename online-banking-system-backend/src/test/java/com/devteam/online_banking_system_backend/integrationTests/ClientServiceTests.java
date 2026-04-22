@@ -1,7 +1,7 @@
 package com.devteam.online_banking_system_backend.integrationTests;
 
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginDto;
-import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientLoginResponseDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthRequestDto;
+import com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos.AuthResponseDto;
 import com.devteam.online_banking_system_backend.persistence.dtos.clientDtos.ClientRegisterDto;
 import com.devteam.online_banking_system_backend.persistence.entities.Client;
 import com.devteam.online_banking_system_backend.services.ClientService;
@@ -80,9 +80,9 @@ public class ClientServiceTests
     @Test
     public void testClientCanLogin()
     {
-        ClientLoginDto loginDto = util.loginDto2();
+        AuthRequestDto loginDto = util.loginDto2();
 
-        ClientLoginResponseDto responseDto = underTests.login(loginDto);
+        AuthResponseDto responseDto = underTests.login(loginDto);
         Client client = underTests.findClientByEmail(loginDto.getEmail());
 
         assertThat(responseDto.getEmail()).isEqualTo(loginDto.getEmail());

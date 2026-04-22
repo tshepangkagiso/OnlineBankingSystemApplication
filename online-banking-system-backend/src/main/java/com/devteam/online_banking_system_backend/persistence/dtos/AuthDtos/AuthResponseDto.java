@@ -1,18 +1,18 @@
-package com.devteam.online_banking_system_backend.persistence.dtos.clientDtos;
+package com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos;
 
 import com.devteam.online_banking_system_backend.persistence.exceptions.ClientException;
 
 import java.util.UUID;
 
-public class ClientLoginResponseDto
+public class AuthResponseDto
 {
     private UUID accountNumber;
     private String accountHolder;
     private String email;
     private String token;
 
-    public ClientLoginResponseDto(){}
-    public ClientLoginResponseDto(UUID accountNumber, String accountHolder, String email, String token)
+    public AuthResponseDto(){}
+    public AuthResponseDto(UUID accountNumber, String accountHolder, String email, String token)
     {
         this.setAccountNumber(accountNumber);
         this.setAccountHolder(accountHolder);

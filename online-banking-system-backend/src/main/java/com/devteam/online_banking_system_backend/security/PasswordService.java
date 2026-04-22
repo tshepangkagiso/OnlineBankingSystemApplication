@@ -1,4 +1,4 @@
-package com.devteam.online_banking_system_backend.services.securityServices;
+package com.devteam.online_banking_system_backend.security;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
