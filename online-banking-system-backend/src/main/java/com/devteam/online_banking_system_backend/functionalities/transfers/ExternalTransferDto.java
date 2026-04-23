@@ -1,4 +1,4 @@
-package com.devteam.online_banking_system_backend.persistence.dtos.transferDtos;
+package com.devteam.online_banking_system_backend.functionalities.transfers;
 
 public class ExternalTransferDto
 {
