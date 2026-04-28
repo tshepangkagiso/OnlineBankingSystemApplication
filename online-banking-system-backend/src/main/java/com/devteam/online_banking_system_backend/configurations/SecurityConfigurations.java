@@ -32,8 +32,10 @@ public class SecurityConfigurations
         http
             .cors( cors -> cors.configurationSource( request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("*"));
+                    config.setAllowedOrigins(List.of(webappRoute));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
+                    config.setAllowCredentials(true);
                     return config;
             }))
             .csrf(csrf -> csrf.disable())

@@ -1,0 +1,5 @@
+export enum ACCOUNTTYPE
+{
+    SAVINGSACCOUNT,
+    CHECKACCOUNT
+}
