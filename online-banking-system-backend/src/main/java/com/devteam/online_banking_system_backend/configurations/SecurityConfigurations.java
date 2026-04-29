@@ -4,6 +4,7 @@ import com.devteam.online_banking_system_backend.filters.JwtAuthFilter;
 import com.devteam.online_banking_system_backend.security.ClientUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -35,7 +36,6 @@ public class SecurityConfigurations
                     config.setAllowedOrigins(List.of(webappRoute));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
-                    config.setAllowCredentials(true);
                     return config;
             }))
             .csrf(csrf -> csrf.disable())

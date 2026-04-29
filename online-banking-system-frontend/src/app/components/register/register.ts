@@ -28,8 +28,9 @@ export class Register
         console.log(this.client);
       },
       error: (err)=>{
-        console.log('failed: ' + err);
+        console.log('failed: ');
         alert('failed to registration')
+        console.log(err)
       }
     })
   }

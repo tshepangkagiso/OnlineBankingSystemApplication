@@ -1,7 +1,10 @@
 package com.devteam.online_banking_system_backend.persistence.dtos.AuthDtos;
 
 import com.devteam.online_banking_system_backend.persistence.exceptions.ClientException;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class AuthResponseDto
@@ -10,14 +13,18 @@ public class AuthResponseDto
     private String accountHolder;
     private String email;
     private String token;
+    @Setter
+    @Getter
+    private Date expiresAt;
 
     public AuthResponseDto(){}
-    public AuthResponseDto(UUID accountNumber, String accountHolder, String email, String token)
+    public AuthResponseDto(UUID accountNumber, String accountHolder, String email, String token, Date expiresAt)
     {
         this.setAccountNumber(accountNumber);
         this.setAccountHolder(accountHolder);
         this.setEmail(email);
         this.setToken(token);
+        this.setExpiresAt(expiresAt);
     }
 
 

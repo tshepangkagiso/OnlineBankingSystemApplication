@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/clients")
@@ -25,7 +26,7 @@ public class ClientController
 
     //Get By Email (READ)
     @GetMapping("/{email}")
-    public ResponseEntity<Client> getClientByEmail(@PathVariable String email)
+    public ResponseEntity<?> getClientByEmail(@PathVariable String email)
     {
         try
         {
@@ -34,13 +35,14 @@ public class ClientController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     //Get ALL
     @GetMapping
-    public ResponseEntity<List<Client>> getAllClients()
+    public ResponseEntity<?> getAllClients()
     {
         try
         {
@@ -49,14 +51,15 @@ public class ClientController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
 
     //Update Client
     @PutMapping("/update/{email}")
-    public ResponseEntity<Client> updateClient(@PathVariable String email, @RequestBody Client client)
+    public ResponseEntity<?> updateClient(@PathVariable String email, @RequestBody Client client)
     {
         try
         {
@@ -65,14 +68,14 @@ public class ClientController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
-
     }
 
     //Open Savings Account
     @PutMapping("/open/savings")
-    public ResponseEntity<Void> openSavingsAccount(@RequestBody OpenAccountDto openAccountDto)
+    public ResponseEntity<?> openSavingsAccount(@RequestBody OpenAccountDto openAccountDto)
     {
         try
         {
@@ -81,14 +84,15 @@ public class ClientController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
 
     //Open Check Account
     @PutMapping("/open/check")
-    public ResponseEntity<Void> openCheckAccount(@RequestBody OpenAccountDto openAccountDto)
+    public ResponseEntity<?> openCheckAccount(@RequestBody OpenAccountDto openAccountDto)
     {
         try
         {
@@ -97,7 +101,8 @@ public class ClientController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

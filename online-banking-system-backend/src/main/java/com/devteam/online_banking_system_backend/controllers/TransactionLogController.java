@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/transactionlogs")
@@ -27,7 +28,7 @@ public class TransactionLogController
     //---- client facing ----
     // Get full history by email
     @GetMapping("/history/{email}")
-    public ResponseEntity<Iterable<TransactionLog>> getHistoryByEmail(@PathVariable String email)
+    public ResponseEntity<?> getHistoryByEmail(@PathVariable String email)
     {
         try
         {
@@ -36,13 +37,14 @@ public class TransactionLogController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     // Get history filtered by account type (CHECKACCOUNT / SAVINGSACCOUNT)
     @GetMapping("/history/{email}/{type}")
-    public ResponseEntity<Iterable<TransactionLog>> getHistoryByAccountType(@PathVariable String email, @PathVariable ACCOUNTTYPE type)
+    public ResponseEntity<?> getHistoryByAccountType(@PathVariable String email, @PathVariable ACCOUNTTYPE type)
     {
         try
         {
@@ -51,13 +53,14 @@ public class TransactionLogController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     // Get recent transactions (e.g., top 5 or 10)
     @GetMapping("/recent/{email}")
-    public ResponseEntity<Iterable<TransactionLog>> getRecentTransactions(@PathVariable String email)
+    public ResponseEntity<?> getRecentTransactions(@PathVariable String email)
     {
         try
         {
@@ -66,7 +69,8 @@ public class TransactionLogController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
@@ -76,7 +80,7 @@ public class TransactionLogController
     //---- admin facing ----
     // Find transactions within a specific date range
     @GetMapping("/admin/range")
-    public ResponseEntity<Iterable<TransactionLog>> getByDateRange(
+    public ResponseEntity<?> getByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end)
     {
@@ -87,13 +91,14 @@ public class TransactionLogController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     // Find transactions by type (DEPOSIT, WITHDRAWAL, etc.)
     @GetMapping("/admin/type/{type}")
-    public ResponseEntity<Iterable<TransactionLog>> getByTransactionType(@PathVariable TRANSACTIONTYPE type)
+    public ResponseEntity<?> getByTransactionType(@PathVariable TRANSACTIONTYPE type)
     {
         try
         {
@@ -102,13 +107,14 @@ public class TransactionLogController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     // Find transactions exceeding a specific amount
     @GetMapping("/admin/high-value")
-    public ResponseEntity<Iterable<TransactionLog>> getHighValueTransactions(@RequestParam BigDecimal threshold)
+    public ResponseEntity<?> getHighValueTransactions(@RequestParam BigDecimal threshold)
     {
         try
         {
@@ -117,7 +123,8 @@ public class TransactionLogController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

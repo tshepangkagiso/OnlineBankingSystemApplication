@@ -5,5 +5,6 @@ export interface AuthResponse
     accountNumber: UUID,
     accountHolder: string,
     email: string,
-    token: string
+    token: string,
+    expiresAt: Date
 }

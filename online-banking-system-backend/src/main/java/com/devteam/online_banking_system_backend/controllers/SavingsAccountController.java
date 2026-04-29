@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/savingsaccounts")
 public class SavingsAccountController
@@ -21,7 +23,7 @@ public class SavingsAccountController
 
     //GET BY ID (READ)
     @GetMapping("/{id}")
-    public ResponseEntity<SavingsAccount> getById(@PathVariable Long id)
+    public ResponseEntity<?> getById(@PathVariable Long id)
     {
         try
         {
@@ -30,13 +32,14 @@ public class SavingsAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     //DEPOSIT
     @PutMapping("/deposit/{email}")
-    public ResponseEntity<SavingsAccount> deposit(@RequestBody SavingsTransactionDto savingsTransactionDto, @PathVariable String email)
+    public ResponseEntity<?> deposit(@RequestBody SavingsTransactionDto savingsTransactionDto, @PathVariable String email)
     {
         try
         {
@@ -45,13 +48,14 @@ public class SavingsAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     //WITHDRAW
     @PutMapping("/withdraw/{email}")
-    public ResponseEntity<SavingsAccount> withdraw(@RequestBody SavingsTransactionDto savingsTransactionDto, @PathVariable String email)
+    public ResponseEntity<?> withdraw(@RequestBody SavingsTransactionDto savingsTransactionDto, @PathVariable String email)
     {
         try
         {
@@ -60,7 +64,8 @@ public class SavingsAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 }

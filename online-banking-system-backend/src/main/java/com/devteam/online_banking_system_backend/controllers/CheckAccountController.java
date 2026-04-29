@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/checkaccounts")
 public class CheckAccountController
@@ -21,7 +23,7 @@ public class CheckAccountController
 
     //get by id (READ)
     @GetMapping("/{id}")
-    public ResponseEntity<CheckAccount> getById(@PathVariable Long id)
+    public ResponseEntity<?> getById(@PathVariable Long id)
     {
         try
         {
@@ -30,14 +32,15 @@ public class CheckAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
 
     //deposit
     @PutMapping("/deposit/{email}")
-    public ResponseEntity<CheckAccount> deposit(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
+    public ResponseEntity<?> deposit(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
     {
         try
         {
@@ -46,13 +49,14 @@ public class CheckAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     //withdraw
     @PutMapping("/withdraw/{email}")
-    public ResponseEntity<CheckAccount> withdraw(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
+    public ResponseEntity<?> withdraw(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
     {
         try
         {
@@ -61,14 +65,15 @@ public class CheckAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
 
     //overdraft limit setter
     @PutMapping("/overdraft/{email}")
-    public ResponseEntity<CheckAccount> overdraftLimitSetter(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
+    public ResponseEntity<?> overdraftLimitSetter(@RequestBody CheckTransactionDto checkTransactionDto, @PathVariable String email)
     {
         try
         {
@@ -77,13 +82,14 @@ public class CheckAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     //overdraft toggle
     @PutMapping("/toggle/{email}")
-    public ResponseEntity<CheckAccount> overdraftToggle(@RequestBody OverdraftToggleDto overdraftToggleDto, @PathVariable String email)
+    public ResponseEntity<?> overdraftToggle(@RequestBody OverdraftToggleDto overdraftToggleDto, @PathVariable String email)
     {
         try
         {
@@ -92,7 +98,8 @@ public class CheckAccountController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

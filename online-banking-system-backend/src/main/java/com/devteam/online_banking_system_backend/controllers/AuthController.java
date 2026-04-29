@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController
@@ -37,7 +41,7 @@ public class AuthController
 
     //Register a client
     @PostMapping("/register")
-    public ResponseEntity<Client> registerClient(@RequestBody ClientRegisterDto clientRegisterDto)
+    public ResponseEntity<?> registerClient(@RequestBody ClientRegisterDto clientRegisterDto)
     {
         try
         {
@@ -46,13 +50,14 @@ public class AuthController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
     //login
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> loginClient(@RequestBody AuthRequestDto authRequest)
+    public ResponseEntity<?> loginClient(@RequestBody AuthRequestDto authRequest)
     {
         try
         {
@@ -60,8 +65,9 @@ public class AuthController
 
             if (authentication.isAuthenticated()) {
                 String token = jwtService.generateToken(authRequest.getEmail());
+                Date expiresAt = jwtService.extractExpiration(token);
                 Client client = this.clientService.findClientByEmail(authRequest.getEmail());
-                AuthResponseDto response = new AuthResponseDto(client.getAccountNumber(), client.getAccountHolder(), client.getEmail(), token);
+                AuthResponseDto response = new AuthResponseDto(client.getAccountNumber(), client.getAccountHolder(), client.getEmail(), token, expiresAt);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
             else
@@ -71,7 +77,8 @@ public class AuthController
         }
         catch (RuntimeException e)
         {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String,String> error = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
