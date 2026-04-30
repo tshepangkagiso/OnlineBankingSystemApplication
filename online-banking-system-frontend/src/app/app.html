@@ -1,6 +1,22 @@
-<nav>
-    <a routerLink="/login">Login</a>
-    <a routerLink="/register">Register</a>
-    <a routerLink="/">Dashboard</a>
-</nav>
-<router-outlet />
+<div class="app-container">
+      <div *ngIf="isNavigate()" class="dashboard-nav">
+        <div class="nav-brand">
+          <fa-icon [icon]="faBuildingColumns"></fa-icon>
+          iNOVA Bank
+        </div>
+        <div class="nav-links">
+          <a routerLink="/dashboard" routerLinkActive="active">
+            <fa-icon [icon]="faHouse"></fa-icon> Dashboard
+          </a>
+          <a routerLink="/transactions" routerLinkActive="active">
+            <fa-icon [icon]="faClockRotateLeft"></fa-icon> History
+          </a>
+          <a (click)="onLogout()" class="logout-link">
+            <fa-icon [icon]="faRightFromBracket"></fa-icon> Logout
+          </a>
+        </div>
+      </div>
+      <main [class.dashboard-content]="isNavigate()">
+        <router-outlet />
+      </main>
+</div>

@@ -1,54 +1,14 @@
-/* ========== CSS VARIABLES ========== */
-:root {
-  --black: #000000;
-  --black-light: #0a0a0a;
-  --dark-blue: #0a1a3a;
-  --deep-blue: #0d2b4e;
-  --violet: #2e1a4e;
-  --purple: #4a1a6e;
-  --white: #ffffff;
-  --gray: #888888;
-  --light-gray: #cccccc;
-  
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 15px 40px rgba(0, 0, 0, 0.5);
-  
-  --radius: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  
-  --spacing-sm: 0.5rem;
-  --spacing: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
-  --spacing-xl: 3rem;
-  --spacing-2xl: 4rem;
-  --spacing-3xl: 5rem;
-}
+/* Add to your existing styles.css */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-  background-color: var(--black);
-  color: var(--white);
-  line-height: 1.5;
-}
-
-/* ========== PUBLIC LAYOUT ========== */
-.public-layout {
+/* Home Layout */
+.home-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--black);
 }
 
-/* ========== HERO SECTION ========== */
+/* Hero Section */
 .hero {
   background: linear-gradient(135deg, var(--black) 0%, var(--dark-blue) 100%);
   min-height: 60vh;
@@ -101,8 +61,9 @@ body {
   text-decoration: none;
   font-size: 1rem;
   transition: all 0.3s ease;
-  cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .btn-login {
@@ -127,7 +88,7 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* ========== ACCOUNTS SECTION ========== */
+/* Accounts Section */
 .accounts-section {
   padding: 80px 48px;
   background-color: var(--black);
@@ -156,8 +117,6 @@ body {
   border-radius: var(--radius-xl);
   padding: 40px;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
 }
 
 .account-card:hover {
@@ -176,7 +135,6 @@ body {
 }
 
 .card-icon {
-  font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
@@ -200,6 +158,9 @@ body {
   padding: 6px 0;
   font-size: 0.9rem;
   color: var(--light-gray);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .card-badge {
@@ -221,7 +182,7 @@ body {
   color: #ff0066;
 }
 
-/* ========== WHY CHOOSE US SECTION ========== */
+/* Why Choose Us Section */
 .why-section {
   padding: 80px 48px;
   background-color: var(--black-light);
@@ -252,7 +213,6 @@ body {
 }
 
 .benefit-icon {
-  font-size: 2.5rem;
   margin-bottom: 16px;
 }
 
@@ -267,7 +227,7 @@ body {
   color: var(--gray);
 }
 
-/* ========== FOOTER ========== */
+/* Footer */
 footer {
   background-color: var(--black);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -299,7 +259,9 @@ footer {
 }
 
 .footer-col a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: var(--gray);
   text-decoration: none;
   font-size: 0.85rem;
@@ -317,14 +279,13 @@ footer {
   margin-top: 16px;
 }
 
-.socials span {
+.socials a {
   font-size: 1.3rem;
-  cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s ease;
 }
 
-.socials span:hover {
+.socials a:hover {
   opacity: 1;
 }
 
@@ -338,91 +299,7 @@ footer {
   color: var(--gray);
 }
 
-/* ========== LOGGED IN LAYOUT ========== */
-.logged-in-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--black);
-}
-
-.dashboard-nav {
-  background-color: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 16px 48px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.nav-brand {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--white);
-}
-
-.nav-links {
-  display: flex;
-  gap: 32px;
-  align-items: center;
-}
-
-.nav-links a {
-  color: var(--gray);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  padding: 8px 0;
-  transition: color 0.2s ease;
-  cursor: pointer;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--white);
-}
-
-.logout-link {
-  color: #ff0066 !important;
-}
-
-.logout-link:hover {
-  color: #ff3388 !important;
-}
-
-.dashboard-content {
-  flex: 1;
-  padding: 24px;
-  background-color: var(--black);
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 1024px) {
-  .bank-name {
-    font-size: 3.5rem;
-  }
-  
-  .accounts-grid {
-    gap: 30px;
-  }
-  
-  .account-card {
-    padding: 30px;
-  }
-  
-  .benefits-grid {
-    gap: 24px;
-  }
-  
-  .footer-content {
-    gap: 32px;
-  }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
   .hero {
     padding: 50px 24px;
@@ -449,9 +326,8 @@ footer {
   }
   
   .btn-login, .btn-register {
-    width: 180px;
-    padding: 12px 24px;
-    text-align: center;
+    width: 200px;
+    justify-content: center;
   }
   
   .accounts-section {
@@ -460,16 +336,10 @@ footer {
   
   .section-title {
     font-size: 1.5rem;
-    margin-bottom: 32px;
   }
   
   .accounts-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  
-  .account-card h3 {
-    font-size: 1.5rem;
   }
   
   .why-section {
@@ -478,11 +348,6 @@ footer {
   
   .benefits-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  footer {
-    padding: 40px 24px 30px;
   }
   
   .footer-content {
@@ -491,31 +356,11 @@ footer {
     gap: 32px;
   }
   
-  .socials {
+  .footer-col a {
     justify-content: center;
   }
   
-  .dashboard-nav {
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-  }
-  
-  .nav-links {
-    gap: 20px;
-  }
-  
-  .dashboard-content {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .bank-name {
-    font-size: 2rem;
-  }
-  
-  .account-card {
-    padding: 24px;
+  .socials {
+    justify-content: center;
   }
 }

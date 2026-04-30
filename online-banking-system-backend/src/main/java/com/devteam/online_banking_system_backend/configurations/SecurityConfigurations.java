@@ -36,12 +36,14 @@ public class SecurityConfigurations
                     config.setAllowedOrigins(List.of(webappRoute));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
+                    //config.setAllowCredentials(true);
                     return config;
             }))
             .csrf(csrf -> csrf.disable())
 
 
             .authorizeHttpRequests(auth -> auth
+                    //.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     // Public endpoints
                     .requestMatchers("/auth/register", "/auth/login").permitAll()
 

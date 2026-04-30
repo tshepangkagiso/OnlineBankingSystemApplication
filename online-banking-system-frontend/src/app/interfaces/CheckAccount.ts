@@ -4,5 +4,5 @@ export interface CheckAccount
 {
     balance: Decimal,
     checkAccountId: number,
-    overDraftLimit: Decimal
+    overdraftLimit: Decimal
 }

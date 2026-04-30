@@ -1,9 +1,107 @@
-<h1>Register</h1>
-<br>
-<form (ngSubmit)="onSubmit()" #registrationForm = "ngForm">
-    <label>Account Holder: <input type="text" name="accountHolder" [(ngModel)] = "request.accountHolder" required=""></label>
-    <label>Email: <input type="text" name="email" [(ngModel)] = "request.email" required=""></label>
-    <label>Password: <input type="text" name="password" [(ngModel)] = "request.password" required=""></label>
-    <br>
-    <button type="submit" [disabled]="registrationForm.invalid">register</button>
-</form>
+<div class="register-container">
+    <div class="register-card">
+        <!-- Back Button -->
+        <button class="back-btn" (click)="goBack()">
+            <fa-icon [icon]="faArrowLeft"></fa-icon>
+            Back to Home
+        </button>
+
+        <!-- Header -->
+        <div class="register-header">
+            <div class="logo">iNOVA</div>
+            <div class="logo-sub">BANK</div>
+            <h1>Create Account</h1>
+            <p>Join the future of banking</p>
+        </div>
+
+        <!-- Register Form -->
+        <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
+            <!-- Account Holder Field -->
+            <div class="form-group">
+                <label>
+                    <fa-icon [icon]="faUser"></fa-icon>
+                    Full Name
+                </label>
+                <input type="text"
+                       name="accountHolder"
+                       [(ngModel)]="request.accountHolder"
+                       #accountHolder="ngModel"
+                       placeholder="Enter your full name"
+                       required>
+                <div *ngIf="accountHolder.invalid && accountHolder.touched" class="error">
+                    <small>Full name is required</small>
+                </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label>
+                    <fa-icon [icon]="faEnvelope"></fa-icon>
+                    Email Address
+                </label>
+                <input type="email"
+                       name="email"
+                       [(ngModel)]="request.email"
+                       #email="ngModel"
+                       placeholder="Enter your email"
+                       required
+                       email>
+                <div *ngIf="email.invalid && email.touched" class="error">
+                    <small *ngIf="email.errors?.['required']">Email is required</small>
+                    <small *ngIf="email.errors?.['email']">Enter a valid email address</small>
+                </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label>
+                    <fa-icon [icon]="faLock"></fa-icon>
+                    Password
+                </label>
+                <input type="password"
+                       name="password"
+                       [(ngModel)]="request.password"
+                       #password="ngModel"
+                       placeholder="Create a strong password"
+                       required
+                       minlength="12">
+                <div *ngIf="password.invalid && password.touched" class="error">
+                    <small *ngIf="password.errors?.['required']">Password is required</small>
+                    <small *ngIf="password.errors?.['minlength']">Password must be at least 12 characters</small>
+                </div>
+                <div class="password-hint">
+                    <small>Use at least 12 characters for security</small>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="register-btn" [disabled]="registerForm.invalid || isLoading">
+                <fa-icon [icon]="faUserPlus"></fa-icon>
+                {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="login-link">
+            <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+        <div class="modal-container" [class.modal-success]="modalType === 'success'" [class.modal-error]="modalType === 'error'" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeModal()">
+                <fa-icon [icon]="faTimes"></fa-icon>
+            </button>
+            <div class="modal-icon">
+                <fa-icon *ngIf="modalType === 'success'" [icon]="faCheckCircle"></fa-icon>
+                <fa-icon *ngIf="modalType === 'error'" [icon]="faExclamationCircle"></fa-icon>
+            </div>
+            <h3 class="modal-title">{{ modalTitle }}</h3>
+            <p class="modal-message">{{ modalMessage }}</p>
+            <button class="modal-btn" (click)="closeModal()">
+                {{ modalType === 'success' ? 'Continue' : 'Try Again' }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -12,7 +12,7 @@ public class CheckAccount extends Account
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkAccountId;
-    private BigDecimal overDraftLimit = new BigDecimal("300.0"); //An overdraft limit is the maximum amount of money your bank allows you to borrow automatically when your account goes below zero
+    private BigDecimal overDraftLimit = new BigDecimal("50000.0"); //An overdraft limit is the maximum amount of money your bank allows you to borrow automatically when your account goes below zero
 
     public CheckAccount(){}
     public CheckAccount(Long checkAccountId, BigDecimal balance, BigDecimal overDraftLimit)

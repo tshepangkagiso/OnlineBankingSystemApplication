@@ -1,0 +1,138 @@
+<!-- home.html -->
+<div class="home-layout">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="bank-name">iNOVA</h1>
+            <div class="bank-subtitle">BANK</div>
+            <p class="tagline">Intelligent banking. Zero complexity.</p>
+            <div class="hero-buttons">
+                <a [routerLink]="['/login']" class="btn-login">
+                    <fa-icon [icon]="faArrowRightToBracket"></fa-icon>
+                    Sign In
+                </a>
+                <a [routerLink]="['/register']" class="btn-register">
+                    <fa-icon [icon]="faUserPlus"></fa-icon>
+                    Open Account
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accounts Section -->
+    <div class="accounts-section">
+        <div class="accounts-container">
+            <h2 class="section-title">Accounts designed for you</h2>
+            <div class="accounts-grid">
+                <!-- Savings Card -->
+                <div class="account-card savings">
+                    <div class="card-icon">
+                        <fa-icon [icon]="faMoneyBillWave" size="2x"></fa-icon>
+                    </div>
+                    <h3>Savings Account</h3>
+                    <p class="card-desc">Grow your wealth every single day</p>
+                    <div class="features">
+                        <p><fa-icon [icon]="faCoins"></fa-icon> Daily compound interest</p>
+                        <p><fa-icon [icon]="faShield"></fa-icon> No monthly fees</p>
+                        <p><fa-icon [icon]="faBolt"></fa-icon> Instant transfers</p>
+                        <p><fa-icon [icon]="faLock"></fa-icon> No overdraft facility</p>
+                    </div>
+                    <div class="card-badge">Up to 8.5% p.a.</div>
+                </div>
+
+                <!-- Check Card -->
+                <div class="account-card check">
+                    <div class="card-icon">
+                        <fa-icon [icon]="faCreditCard" size="2x"></fa-icon>
+                    </div>
+                    <h3>Check Account</h3>
+                    <p class="card-desc">Everyday banking with flexibility</p>
+                    <div class="features">
+                        <p><fa-icon [icon]="faHandHoldingDollar"></fa-icon> Overdraft facility</p>
+                        <p><fa-icon [icon]="faBolt"></fa-icon> Unlimited transactions</p>
+                        <p><fa-icon [icon]="faMobileScreen"></fa-icon> Virtual card included</p>
+                        <p><fa-icon [icon]="faSackDollar"></fa-icon> No interest earned</p>
+                    </div>
+                    <div class="card-badge">Overdraft up to R50,000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us Section -->
+    <div class="why-section">
+        <div class="why-container">
+            <h2 class="section-title">Why South Africans choose iNOVA</h2>
+            <div class="benefits-grid">
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <fa-icon [icon]="faShieldHeart" size="2x"></fa-icon>
+                    </div>
+                    <h4>Bank-grade security</h4>
+                    <p>256-bit encryption keeps your money safe</p>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <fa-icon [icon]="faBolt" size="2x"></fa-icon>
+                    </div>
+                    <h4>Instant payments</h4>
+                    <p>Send and receive money in real-time</p>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <fa-icon [icon]="faMobileScreen" size="2x"></fa-icon>
+                    </div>
+                    <h4>Mobile first</h4>
+                    <p>Fully optimized for every device</p>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">
+                        <fa-icon [icon]="faFlag" size="2x"></fa-icon>
+                    </div>
+                    <h4>Proudly South African</h4>
+                    <p>Built locally for local needs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>iNOVA Bank</h4>
+                <p>Intelligent banking solutions for modern South Africans.</p>
+                <div class="socials">
+                    <a href="#"><fa-icon [icon]="faFacebook"></fa-icon></a>
+                    <a href="#"><fa-icon [icon]="faTwitter"></fa-icon></a>
+                    <a href="#"><fa-icon [icon]="faInstagram"></fa-icon></a>
+                    <a href="#"><fa-icon [icon]="faLinkedin"></fa-icon></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Products</h4>
+                <a href="#"><fa-icon [icon]="faMoneyBillWave"></fa-icon> Savings Account</a>
+                <a href="#"><fa-icon [icon]="faCreditCard"></fa-icon> Check Account</a>
+                <a href="#"><fa-icon [icon]="faWallet"></fa-icon> Credit Cards</a>
+                <a href="#"><fa-icon [icon]="faLandmark"></fa-icon> Loans</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="#"><fa-icon [icon]="faHeadset"></fa-icon> Help Center</a>
+                <a href="#"><fa-icon [icon]="faEnvelope"></fa-icon> Contact Us</a>
+                <a href="#"><fa-icon [icon]="faPhone"></fa-icon> FAQs</a>
+                <a href="#"><fa-icon [icon]="faLock"></fa-icon> Security</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="#"><fa-icon [icon]="faFileLines"></fa-icon> Privacy Policy</a>
+                <a href="#"><fa-icon [icon]="faScaleBalanced"></fa-icon> Terms of Service</a>
+                <a href="#"><fa-icon [icon]="faLandmark"></fa-icon> FSP License</a>
+                <a href="#"><fa-icon [icon]="faEnvelope"></fa-icon> Complaints</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 iNOVA Bank. All rights reserved. | FSP License #12345 | Banking Regulator of South Africa</p>
+        </div>
+    </footer>
+</div>

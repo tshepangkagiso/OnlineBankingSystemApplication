@@ -1,1 +1,200 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+        <div class="spinner">
+            <fa-icon [icon]="faSpinner" animation="spin" size="3x"></fa-icon>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- Welcome Header -->
+    <div class="welcome-header" *ngIf="!isLoading && client">
+        <div class="welcome-badge">
+            <fa-icon [icon]="faUserCircle"></fa-icon>
+            <div class="welcome-text">
+                <h1>Welcome back, {{client.accountHolder}}!</h1>
+                <p>Here's your financial overview</p>
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <fa-icon [icon]="faBank"></fa-icon>
+                <div class="stat-info">
+                    <span>Total Balance</span>
+                    <strong>{{ formatCurrency(getTotalBalance()) }}</strong>
+                </div>
+            </div>
+            <div class="stat-card">
+                <fa-icon [icon]="faWallet"></fa-icon>
+                <div class="stat-info">
+                    <span>Active Accounts</span>
+                    <strong>{{ (client.savingsAccount ? 1 : 0) + (client.checkAccount ? 1 : 0) }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accounts Grid -->
+    <div class="accounts-dashboard" *ngIf="!isLoading && client">
+        <!-- Savings Account Card -->
+        <div class="account-card-modern savings-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <fa-icon [icon]="faMoneyBillWave" size="2x"></fa-icon>
+                </div>
+                <div class="card-title">
+                    <h3>Savings Account</h3>
+                    <p>Grow your wealth</p>
+                </div>
+            </div>
+
+            <div *ngIf="!client.savingsAccount" class="empty-state">
+                <fa-icon [icon]="faCoins" size="3x"></fa-icon>
+                <p>No Savings Account yet</p>
+                <button class="btn-open" (click)="onOpenSavings()">
+                    <fa-icon [icon]="faPlusCircle"></fa-icon>
+                    Open Savings Account
+                </button>
+            </div>
+
+            <div *ngIf="client.savingsAccount" class="card-content">
+                <div class="balance-section">
+                    <span class="balance-label">Current Balance</span>
+                    <span class="balance-amount">{{ formatCurrency(client.savingsAccount.balance) }}</span>
+                </div>
+                
+                <div class="account-details">
+                    <div class="detail">
+                        <fa-icon [icon]="faPercent"></fa-icon>
+                        <span>Interest Rate: <strong>{{client.savingsAccount.interestRate}}% p.a.</strong></span>
+                    </div>
+                    <div class="detail">
+                        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                        <span>Last Deposit: {{client.savingsAccount.latestDepositDate | date:'MMM d, yyyy'}}</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <div class="action-group">
+                        <label>Amount</label>
+                        <input type="number" [(ngModel)]="savingsAmount" placeholder="Enter amount" step="0.01">
+                        <div class="button-group">
+                            <button class="btn-deposit" (click)="onSavingsDeposit()">
+                                <fa-icon [icon]="faArrowUp"></fa-icon>
+                                Deposit
+                            </button>
+                            <button class="btn-withdraw" (click)="onSavingsWithdraw()">
+                                <fa-icon [icon]="faArrowDown"></fa-icon>
+                                Withdraw
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Check Account Card -->
+        <div class="account-card-modern check-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <fa-icon [icon]="faCreditCard" size="2x"></fa-icon>
+                </div>
+                <div class="card-title">
+                    <h3>Check Account</h3>
+                    <p>Everyday banking</p>
+                </div>
+            </div>
+
+            <div *ngIf="!client.checkAccount" class="empty-state">
+                <fa-icon [icon]="faCreditCard" size="3x"></fa-icon>
+                <p>No Check Account yet</p>
+                <button class="btn-open" (click)="onOpenCheck()">
+                    <fa-icon [icon]="faPlusCircle"></fa-icon>
+                    Open Check Account
+                </button>
+            </div>
+
+            <div *ngIf="client.checkAccount" class="card-content">
+                <div class="balance-section">
+                    <span class="balance-label">Current Balance</span>
+                    <span class="balance-amount">{{ formatCurrency(client.checkAccount.balance) }}</span>
+                </div>
+                
+                <div class="account-details">
+                    <div class="detail" [class.overdraft-enabled]="isOverdraftEnabled()">
+                        <fa-icon [icon]="faShieldAlt"></fa-icon>
+                        <span>Overdraft Limit: <strong>{{ formatCurrency(client.checkAccount.overdraftLimit) }}</strong></span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <div class="action-group">
+                        <label>Amount</label>
+                        <input type="number" [(ngModel)]="checkAmount" placeholder="Enter amount" step="0.01">
+                        <div class="button-group">
+                            <button class="btn-deposit" (click)="onCheckDeposit()">
+                                <fa-icon [icon]="faArrowUp"></fa-icon>
+                                Deposit
+                            </button>
+                            <button class="btn-withdraw" (click)="onCheckWithdraw()">
+                                <fa-icon [icon]="faArrowDown"></fa-icon>
+                                Withdraw
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overdraft Management -->
+                <div class="overdraft-section">
+                    <h4>
+                        <fa-icon [icon]="faSlidersH"></fa-icon>
+                        Overdraft Management
+                    </h4>
+                    <div class="overdraft-controls">
+                        <div class="limit-setter">
+                            <input type="number" [(ngModel)]="overdraftLimit" placeholder="New overdraft limit" step="0.01">
+                            <button class="btn-set-limit" (click)="onSetOverdraft()">
+                                Set Limit
+                            </button>
+                        </div>
+                        <div class="toggle-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" [(ngModel)]="overdraftToggle.toggle" (change)="onToggleOverdraft()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">
+                                <fa-icon [icon]="overdraftToggle.toggle ? faToggleOn : faToggleOff"></fa-icon>
+                                Overdraft Protection {{ overdraftToggle.toggle ? 'ON' : 'OFF' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMsg && !isLoading" class="error-banner">
+        <fa-icon [icon]="faExclamationCircle"></fa-icon>
+        <p>{{errorMsg}}</p>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+        <div class="modal-container" [class.modal-success]="modalType === 'success'" [class.modal-error]="modalType === 'error'" [class.modal-info]="modalType === 'info'" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeModal()">
+                <fa-icon [icon]="faTimes"></fa-icon>
+            </button>
+            <div class="modal-icon">
+                <fa-icon *ngIf="modalType === 'success'" [icon]="faCheckCircle"></fa-icon>
+                <fa-icon *ngIf="modalType === 'error'" [icon]="faExclamationCircle"></fa-icon>
+                <fa-icon *ngIf="modalType === 'info'" [icon]="faShieldAlt"></fa-icon>
+            </div>
+            <h3 class="modal-title">{{ modalTitle }}</h3>
+            <p class="modal-message">{{ modalMessage }}</p>
+            <button class="modal-btn" (click)="closeModal()">
+                {{ modalType === 'success' ? 'Continue' : 'Try Again' }}
+            </button>
+        </div>
+    </div>
+</div>

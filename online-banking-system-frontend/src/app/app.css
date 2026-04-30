@@ -1,0 +1,96 @@
+.app-container {
+      min-height: 100vh;
+      background-color: #000000;
+    }
+    .dashboard-nav {
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 16px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .nav-brand {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #888888;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 8px 0;
+      transition: color 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #ffffff;
+    }
+    .logout-link {
+      color: #ff0066 !important;
+    }
+    .logout-link:hover {
+      color: #ff3388 !important;
+    }
+    .dashboard-content {
+      padding: 24px;
+    }
+    @media (max-width: 768px) {
+      .dashboard-nav {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+      }
+      .nav-links {
+        gap: 20px;
+      }
+      .dashboard-content {
+        padding: 16px;
+      }
+    }
+    
+fa-icon {
+  margin-right: 8px;
+}
+
+.btn-login fa-icon,
+.btn-register fa-icon {
+  margin-right: 8px;
+}
+
+.features p fa-icon {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.footer-col a fa-icon {
+  width: 20px;
+  margin-right: 8px;
+}
+
+.socials a {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+.nav-links a fa-icon {
+  margin-right: 6px;
+}

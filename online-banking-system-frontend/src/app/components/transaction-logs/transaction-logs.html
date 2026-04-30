@@ -1,0 +1,231 @@
+<div class="transaction-container">
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+        <div class="spinner">
+            <fa-icon [icon]="faSpinner" animation="spin" size="3x"></fa-icon>
+            <p>Loading transactions...</p>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <div class="transactions-header">
+        <div class="header-content">
+            <div class="header-icon">
+                <fa-icon [icon]="faHistory"></fa-icon>
+            </div>
+            <div class="header-text">
+                <h1>Transaction History</h1>
+                <p>Track and manage all your financial activities</p>
+            </div>
+        </div>
+        <div class="header-stats" *ngIf="!isLoading && filteredLogs.length > 0">
+            <div class="stat-badge">
+                <fa-icon [icon]="faWallet"></fa-icon>
+                <span>{{ filteredLogs.length }} Transactions</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMsg && !isLoading" class="error-banner">
+        <fa-icon [icon]="faExclamationCircle"></fa-icon>
+        <p>{{errorMsg}}</p>
+        <button (click)="loadTransactionLogs()" class="retry-btn">Try Again</button>
+    </div>
+
+    <!-- Filters Section -->
+    <div *ngIf="!isLoading && transactionLogs.length > 0" class="filters-section">
+        <div class="filters-header">
+            <h3>
+                <fa-icon [icon]="faFilter"></fa-icon>
+                Filter Transactions
+            </h3>
+            <button (click)="resetFilters()" class="reset-all-btn">
+                <fa-icon [icon]="faUndo"></fa-icon>
+                Reset All
+            </button>
+        </div>
+
+        <div class="recent-toggle">
+            <label class="toggle-switch-small">
+                <input type="checkbox" [(ngModel)]="showRecentOnly" (change)="toggleRecentOnly()">
+                <span class="toggle-slider-small"></span>
+            </label>
+            <span class="toggle-label">
+                <fa-icon [icon]="faClock"></fa-icon>
+                Show Recent Only
+            </span>
+        </div>
+
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label>
+                    <fa-icon [icon]="faWallet"></fa-icon>
+                    Account Type
+                </label>
+                <select [(ngModel)]="selectedAccountType" (change)="onAccountTypeChange()">
+                    <option *ngFor="let type of accountTypes" [value]="type.value">
+                        {{type.label}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>
+                    <fa-icon [icon]="faExchangeAlt"></fa-icon>
+                    Transaction Type
+                </label>
+                <select [(ngModel)]="selectedTransactionType" (change)="applyFilters()">
+                    <option *ngFor="let type of transactionTypes" [value]="type.value">
+                        {{type.label}}
+                    </option>
+                </select>
+                <button *ngIf="selectedTransactionType !== 'ALL'" (click)="clearTypeFilter()" class="clear-btn-small">
+                    <fa-icon [icon]="faTimes"></fa-icon> Clear
+                </button>
+            </div>
+
+            <div class="filter-group date-group">
+                <label>
+                    <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                    Date Range
+                </label>
+                <div class="date-inputs">
+                    <input type="date" [(ngModel)]="startDate" (change)="applyFilters()" placeholder="Start Date">
+                    <span>to</span>
+                    <input type="date" [(ngModel)]="endDate" (change)="applyFilters()" placeholder="End Date">
+                </div>
+                <button *ngIf="startDate || endDate" (click)="clearDateFilter()" class="clear-btn-small">
+                    <fa-icon [icon]="faTimes"></fa-icon> Clear Dates
+                </button>
+            </div>
+
+            <div class="filter-group">
+                <label>
+                    <fa-icon [icon]="faMoneyBillWave"></fa-icon>
+                    Minimum Amount
+                </label>
+                <div class="amount-input-group">
+                    <input type="number" [(ngModel)]="highValueThreshold" placeholder="Enter amount" step="0.01">
+                    <button (click)="loadHighValueTransactions()" class="search-btn">
+                        <fa-icon [icon]="faSearch"></fa-icon> Search
+                    </button>
+                </div>
+                <button *ngIf="highValueThreshold !== 1000" (click)="clearAmountFilter()" class="clear-btn-small">
+                    <fa-icon [icon]="faTimes"></fa-icon> Clear
+                </button>
+            </div>
+        </div>
+
+        <div class="quick-search">
+            <button (click)="loadTransactionsByDateRange()" class="quick-btn date-btn">
+                <fa-icon [icon]="faCalendarAlt"></fa-icon> Search by Date Range
+            </button>
+            <button (click)="loadTransactionsByType()" class="quick-btn type-btn">
+                <fa-icon [icon]="faSearch"></fa-icon> Search by Selected Type
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && filteredLogs.length > 0" class="summary-bar">
+        <div class="summary-info">
+            <fa-icon [icon]="faChartLine"></fa-icon>
+            <span>Showing <strong>{{filteredLogs.length}}</strong> of <strong>{{transactionLogs.length}}</strong> transactions</span>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && transactionLogs.length === 0 && !errorMsg" class="empty-state">
+        <fa-icon [icon]="faHistory" size="4x"></fa-icon>
+        <h3>No Transactions Yet</h3>
+        <p>Your transaction history will appear here once you start banking.</p>
+        <button routerLink="/dashboard" class="action-btn">Go to Dashboard</button>
+    </div>
+
+    <div *ngIf="!isLoading && transactionLogs.length > 0 && filteredLogs.length === 0 && !errorMsg" class="empty-state">
+        <fa-icon [icon]="faBan" size="4x"></fa-icon>
+        <h3>No Matches Found</h3>
+        <p>No transactions match your current filters.</p>
+        <div class="empty-actions">
+            <button *ngIf="highValueThreshold !== 1000" (click)="clearAmountFilter()" class="action-btn outline">
+                <fa-icon [icon]="faTimes"></fa-icon> Clear Amount Filter
+            </button>
+            <button *ngIf="selectedTransactionType !== 'ALL'" (click)="clearTypeFilter()" class="action-btn outline">
+                <fa-icon [icon]="faTimes"></fa-icon> Clear Type Filter
+            </button>
+            <button *ngIf="startDate || endDate" (click)="clearDateFilter()" class="action-btn outline">
+                <fa-icon [icon]="faTimes"></fa-icon> Clear Date Filter
+            </button>
+            <button (click)="resetFilters()" class="action-btn primary">
+                <fa-icon [icon]="faUndo"></fa-icon> Reset All Filters
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && filteredLogs.length > 0" class="table-wrapper">
+        <table class="transaction-table">
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Account Type</th>
+                    <th>Transaction Type</th>
+                    <th>Pre Balance</th>
+                    <th>Post Balance</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let log of filteredLogs" [class]="getTransactionClass(log.transactionType)">
+                    <td class="date-cell">
+                        <fa-icon [icon]="faClock" class="cell-icon"></fa-icon>
+                        {{formatDate(log.transactionDatetime)}}
+                    </td>
+                    <td class="account-cell">
+                        <span class="account-badge" [class.savings]="log.accountType.toString() === 'SAVINGSACCOUNT'" [class.check]="log.accountType.toString() === 'CHECKACCOUNT'">
+                            {{getAccountTypeLabel(log.accountType)}}
+                        </span>
+                    </td>
+                    <td class="type-cell">
+                        <span class="type-badge" [class.deposit]="log.transactionType.toString() === 'DEPOSIT'" [class.withdraw]="log.transactionType.toString() === 'WITHDRAWAL'" [class.interest]="log.transactionType.toString() === 'APPLIEDINTERESTTOSAVINGSACCOUNT'">
+                            <fa-icon [icon]="getTransactionIcon(log.transactionType)"></fa-icon>
+                            {{getTransactionTypeLabel(log.transactionType)}}
+                        </span>
+                    </td>
+                    <td class="balance-cell">{{formatCurrency(log.preTransactionBalance)}}</td>
+                    <td class="balance-cell">{{formatCurrency(log.postTransactionBalance)}}</td>
+                    <td class="amount-cell">
+                        <span *ngIf="getAmountChange(log) > 0" class="amount-positive">
+                            <fa-icon [icon]="faArrowUp"></fa-icon>
+                            +{{formatCurrency(getAmountChange(log))}}
+                        </span>
+                        <span *ngIf="getAmountChange(log) < 0" class="amount-negative">
+                            <fa-icon [icon]="faArrowDown"></fa-icon>
+                            {{formatCurrency(getAmountChange(log))}}
+                        </span>
+                        <span *ngIf="getAmountChange(log) === 0" class="amount-neutral">
+                            {{formatCurrency(0)}}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+        <div class="modal-container" [class.modal-success]="modalType === 'success'" [class.modal-error]="modalType === 'error'" [class.modal-info]="modalType === 'info'" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeModal()">
+                <fa-icon [icon]="faTimes"></fa-icon>
+            </button>
+            <div class="modal-icon">
+                <fa-icon *ngIf="modalType === 'success'" [icon]="faCheckCircle"></fa-icon>
+                <fa-icon *ngIf="modalType === 'error'" [icon]="faExclamationCircle"></fa-icon>
+                <fa-icon *ngIf="modalType === 'info'" [icon]="faInfoCircle"></fa-icon>
+            </div>
+            <h3 class="modal-title">{{ modalTitle }}</h3>
+            <p class="modal-message">{{ modalMessage }}</p>
+            <button class="modal-btn" (click)="closeModal()">
+                {{ modalType === 'success' ? 'Continue' : 'Try Again' }}
+            </button>
+        </div>
+    </div>
+</div>
