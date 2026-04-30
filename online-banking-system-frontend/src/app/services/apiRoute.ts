@@ -1,1 +1,1 @@
-export const baseUrl = 'http://localhost:8080';
+export const baseUrl = 'https://inora-backend.lemonwater-97e58fed.southafricanorth.azurecontainerapps.io';

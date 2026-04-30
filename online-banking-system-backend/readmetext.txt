@@ -13,3 +13,7 @@
 . What was the hardest part of this project? "The hardest part was ensuring that a midnight interest calculation wouldn't conflict with a user's real-time withdrawal. I solved this by implementing a locking strategy and using custom transaction propagation to ensure that even if one account failed, the rest of the bank's records remained accurate and committed."
 
 .implemented jwt authentication and authorization using spring security
+
+
+
+docker run -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/dbname -e SPRING_DATASOURCE_USERNAME=username -e SPRING_DATASOURCE_PASSWORD=password -e JWT_SECRET=secret tshepangkagisomashigo/onlinebankingsystembackend:latest

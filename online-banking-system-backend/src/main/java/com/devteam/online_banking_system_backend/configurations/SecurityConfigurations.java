@@ -29,11 +29,12 @@ public class SecurityConfigurations
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter, AuthenticationProvider authenticationProvider) throws Exception
     {
         String webappRoute = "http://localhost:4200";
+        String AzureWebRoute = "https://inovaonlinebanking.azurewebsites.net";
 
         http
             .cors( cors -> cors.configurationSource( request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of(webappRoute));
+                    config.setAllowedOrigins(List.of(webappRoute,AzureWebRoute));
                     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     config.setAllowedHeaders(List.of("*"));
                     //config.setAllowCredentials(true);
