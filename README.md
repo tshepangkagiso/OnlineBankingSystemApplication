@@ -5,7 +5,7 @@
 ## Screenshots
 
 ### Login Page
-![Login Page](screenshots/login.png)
+![Login Page](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/login.png)
 
 ### Dashboard
 ![Dashboard](screenshots/dashboard.png)
