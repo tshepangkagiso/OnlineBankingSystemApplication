@@ -1,6 +1,18 @@
 ```markdown
 # 🏦 iNOVA Bank - Digital Banking Platfor
 
+
+## Screenshots
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Transaction History
+![Transaction History](screenshots/transactions.png)
+
 ## 📌 Overview
 
 iNOVA Bank is a full-stack digital banking platform that simulates core banking operations with enterprise-grade security and financial precision. The system supports two account types (Savings & Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
