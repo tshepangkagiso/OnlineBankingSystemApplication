@@ -1,17 +1,20 @@
-```markdown
 # 🏦 iNOVA Bank - Digital Banking Platfor
 
-```
-## Screenshots
+## 📸 Screenshots
 
-### Login Page
-![Login Page](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/login.png)
+### Authentication Flow
+| Login | Register |
+|-------|----------|
+| ![Login](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/login.png?raw=true) | ![Register](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/register.png?raw=true) |
 
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
+### Main Features
+| Dashboard | Transaction History |
+|-----------|---------------------|
+| ![Dashboard](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/accounts.png?raw=true) | ![History](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/logs.png?raw=true) |
 
-### Transaction History
-![Transaction History](screenshots/transactions.png)
+### Home Page
+![Home Top](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/home%20top.png?raw=true)
+![Home Footer](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/home%20footer.png?raw=true)
 
 ## 📌 Overview
 
