@@ -1,21 +1,24 @@
-```markdown
-# 🏦 iNOVA Bank - Digital Banking Platfor
-
-
-## Screenshots
-
-### Login Page
-![Login Page](screenshots/login.png)
-
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
-
-### Transaction History
-![Transaction History](screenshots/transactions.png)
+# 🏦 iNOVA Bank - Digital Banking Platform
 
 ## 📌 Overview
 
-iNOVA Bank is a full-stack digital banking platform that simulates core banking operations with enterprise-grade security and financial precision. The system supports two account types (Savings & Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
+iNOVA Bank is a full-stack Spring Boot, Angular and PostgreSQL digital banking platform that simulates core banking operations with enterprise-grade security and financial precision. The system supports two account types (Savings & Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
+
+## 📸 Screenshots
+
+### Authentication Flow
+| Login | Register |
+|-------|----------|
+| ![Login](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/login.png?raw=true) | ![Register](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/register.png?raw=true) |
+
+### Main Features
+| Dashboard | Transaction History |
+|-----------|---------------------|
+| ![Dashboard](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/accounts.png?raw=true) | ![History](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/logs.png?raw=true) |
+
+### Home Page
+![Home Top](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/home%20top.png?raw=true)
+![Home Footer](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/home%20footer.png?raw=true)
 
 ---
 
