@@ -5,10 +5,6 @@
 
 iNOVA Bank is a full-stack digital banking platform that simulates core banking operations with enterprise-grade security and financial precision. The system supports two account types (Savings & Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
 
-**Live Demo:** [Coming Soon]  
-**Backend Repository:** [Link]  
-**Frontend Repository:** [Link]
-
 ---
 
 ## ✨ Features
@@ -90,8 +86,6 @@ iNOVA Bank is a full-stack digital banking platform that simulates core banking 
 - Git – Version control
 
 ---
-
-Here's the **Architecture section in plain words (bra minimum)**:
 
 ---
 
@@ -310,16 +304,6 @@ transaction_logs (id, client_email, account_type, transaction_type, pre_balance,
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-## 📧 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - your.email@example.com
-
-Project Links:
-- Frontend: [https://github.com/yourusername/inova-bank-frontend](https://github.com/yourusername/inova-bank-frontend)
-- Backend: [https://github.com/yourusername/inova-bank-backend](https://github.com/yourusername/inova-bank-backend)
 
 ---
 
