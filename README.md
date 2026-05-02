@@ -4,7 +4,7 @@
 
 iNOVA Bank is a cloud-native, full-stack digital banking platform built with Spring Boot, Angular, and PostgreSQL. The system simulates core banking operations with enterprise-grade security and financial precision. It supports two account types (Savings & Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
 
-The platform is fully deployed on Microsoft Azure using Docker containers, Azure Container Apps, and Azure Web Apps – making it a production-ready, scalable cloud application.
+The platform was fully deployed on Microsoft Azure using Docker containers, Azure Container Apps, and Azure Web Apps, showcasing a production-style cloud deployment that demonstrates scalable architecture patterns.
 
 ## 📸 Screenshots
 
