@@ -1,8 +1,10 @@
-# 🏦 iNOVA Bank - Digital Banking Platform
+# 🏦 iNOVA Bank - Cloud-Native Digital Banking Platform
 
 ## 📌 Overview
 
-iNOVA Bank is a full-stack Spring Boot, Angular and PostgreSQL digital banking platform that simulates core banking operations with enterprise-grade security and financial precision. The system supports two account types (Savings & Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
+iNOVA Bank is a cloud-native, full-stack digital banking platform built with Spring Boot, Angular, and PostgreSQL. The system simulates core banking operations with enterprise-grade security and financial precision. It supports two account types (Savings & Cheque/Check) with distinct features including daily interest calculation, overdraft management, and comprehensive transaction auditing.
+
+The platform is fully deployed on Microsoft Azure using Docker containers, Azure Container Apps, and Azure Web Apps – making it a production-ready, scalable cloud application
 
 ## 📸 Screenshots
 
@@ -20,6 +22,8 @@ iNOVA Bank is a full-stack Spring Boot, Angular and PostgreSQL digital banking p
 ![Home Top](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/home%20top.png?raw=true)
 ![Home Footer](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/home%20footer.png?raw=true)
 
+### Azure Cloud Infrastructure
+![azure](https://github.com/tshepangkagiso/OnlineBankingSystemApplication/blob/master/screenshots/azure.png?raw=true)
 ---
 
 ## ✨ Features
@@ -70,38 +74,146 @@ iNOVA Bank is a full-stack Spring Boot, Angular and PostgreSQL digital banking p
 
 ---
 
+## ☁️ Deployment (Azure & Docker)
+
+This system is deployed using Microsoft Azure with a containerized backend and a hosted frontend. Docker Hub is used for image storage, and all deployments are done manually via Visual Studio Code.
+
+---
+
+### 🌐 Frontend Deployment (Azure Web App)
+
+The frontend is deployed to an Azure Web App as static files.
+
+### Configuration
+
+| Configuration | Value |
+|--------------|-------|
+| Service | Microsoft Azure Web App |
+| Operating System | Windows |
+| Region | South Africa North |
+| Pricing Tier | Basic (B1) |
+
+### Deployment Process
+
+- Build the project locally (`ng build --production`)
+- Deploy only the contents of the `dist/.../browser` folder using the VS Code Azure App Service extension
+- The deployed files are served directly by the Web App
+
+---
+
+## 🐳 Backend Deployment (Docker + Azure Container Apps)
+
+The backend is containerized and deployed using Azure Container Apps.
+
+### Configuration
+
+| Configuration | Value |
+|--------------|-------|
+| Container Image | `tshepangkagisomashigo/onlinebankingsystembackend:latest` |
+| Image Registry | Docker Hub (public repository) |
+| Service | Microsoft Azure Container Apps |
+| OS | Linux |
+| CPU | 0.5 cores |
+| Memory | 1 GiB |
+| Ingress | Enabled (public endpoint) |
+| Port | 8080 |
+| Scaling | Consumption-based |
+
+### Build & Push Commands
+
+```bash
+docker build -t tshepangkagisomashigo/onlinebankingsystembackend:latest .
+docker push tshepangkagisomashigo/onlinebankingsystembackend:latest
+```
+
+### Runtime Behavior
+
+- The container is pulled from Docker Hub during deployment
+- Azure assigns a public URL once ingress is enabled
+- The container runs continuously with automatic restart policies
+
+---
+
+## 🗄️ Database (Azure Hosted)
+
+The system uses a managed database hosted on Microsoft Azure.
+
+### Configuration
+
+| Configuration | Value |
+|--------------|-------|
+| Hosting | Microsoft Azure |
+| Access Control | Firewall rules + credentials |
+| Connection | Environment variables supplied to container |
+
+---
+
+## 🔗 Integration Flow
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Frontend App  │────▶│ Azure Container │────▶│    Azure DB     │
+│ (Azure Web App) │     │ Apps (Docker)   │     │ (PostgreSQL)    │
+│                 │◀────│     :8080       │◀────│                 │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
+
+- Frontend is deployed and assigned a public URL
+- Backend container is deployed and exposed via Azure Container Apps
+- Backend is configured to allow requests from the frontend URL (CORS)
+- Frontend is updated to use the backend's public endpoint
+
+
 ## 🛠️ Tech Stack
 
 ### Backend
+
 | Technology | Purpose |
 |------------|---------|
 | Java 17 | Core language |
 | Spring Boot 3.x | Application framework |
-| Spring Security | Authentication & Authorization |
+| Spring Security | Authentication and authorization |
 | JWT | Token-based security |
 | Spring Data JPA | Database operations |
-| Hibernate | ORM |
+| Hibernate | Object-relational mapping |
 | PostgreSQL | Production database |
-| H2 Database | Development/testing |
-| Maven | Build tool |
-
-### Frontend
-| Technology | Purpose |
-|------------|---------|
-| Angular 20 | UI framework |
-| TypeScript | Type-safe development |
-| RxJS | Reactive programming |
-| Font Awesome | Icons |
-| CSS3 | Styling (Dark theme) |
-
-### Tools & Testing
-- JUnit 5 – Unit testing
-- MockMvc – Integration testing
-- Postman – API testing
-- Git – Version control
+| H2 Database | Development and testing |
+| Maven | Build automation |
 
 ---
 
+### Frontend
+
+| Technology | Purpose |
+|------------|---------|
+| Angular 20 | User interface framework |
+| TypeScript | Type-safe development |
+| RxJS | Reactive programming |
+| Font Awesome | Icons |
+| CSS3 | Styling (dark theme) |
+
+---
+
+### Testing & Development Tools
+
+| Technology | Purpose |
+|------------|---------|
+| JUnit 5 | Unit testing |
+| MockMvc | Integration testing |
+| Postman | API testing |
+| Git | Version control |
+
+---
+
+### Cloud & DevOps
+
+| Technology | Purpose |
+|------------|---------|
+| Microsoft Azure | Cloud provider |
+| Azure Container Apps | Backend hosting |
+| Azure Web App | Frontend hosting |
+| Docker | Containerization |
+| Docker Hub | Container image registry |
 ---
 
 ## 🏗️ Architecture
@@ -118,8 +230,7 @@ iNOVA Bank is a full-stack Spring Boot, Angular and PostgreSQL digital banking p
 
 **Concurrency:** Pessimistic locking prevents race conditions. Batch interest uses isolated transactions so one failure doesn't kill the whole batch.
 
-```
-
+**Cloud Flow**: Code → Docker build → Push to Docker Hub → Azure pulls image → Azure Container Apps runs backend → Frontend connects to backend URL → User accesses via public endpoint
 ---
 
 ## 🔄 API Endpoints
